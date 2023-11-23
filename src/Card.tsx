@@ -87,7 +87,6 @@ const PlayingCard = ({
       const shadowBlur = 30; // Shadow blur
 
       const scale = isFocused ? 1.5 : 1.1;
-      if (Math.random() > 0.9) console.log(scale);
 
       card.style.transform = `translate(${dx * drift}px, ${
         dy * drift - (isFocused ? 50 : 0) // FOCUS UPWARD MOVEMENT ALSO REFERENCED IN HAND
