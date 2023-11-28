@@ -1,17 +1,19 @@
 import { useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
+import { useSpring, animated, to } from '@react-spring/web';
+import { useGesture } from '@use-gesture/react';
 
 // Define the styles for the card and its elements
-const Card = styled.div<{ rotate?: number }>`
+const Card = styled(animated.div)`
   width: 200px;
   height: 300px;
-  background: linear-gradient(to bottom, #fff, #f9f9f9);
+  background: linear-gradient(to bottom, #fff, #ddd);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   box-sizing: border-box;
   transition: transform 0.3s ease;
-  rotate: ${(props) => props.rotate || 0}deg;
+  touch-action: none;
 `;
 
 const Cost = styled.div`
@@ -41,72 +43,96 @@ const CardHeader = styled.div`
   align-items: center;
 `;
 
+type Orientation = {
+  rotateX: number;
+  rotateY: number;
+  rotateZ: number;
+  scale: number;
+  x: number;
+  y: number;
+};
+
 export type Props = {
   cost: number;
   title: string;
   imageUrl: string;
   text: string; // to be changed to something dynamically interpretable later
-  onClick?: () => void;
   isFocused?: boolean;
   className?: string;
-  rotate?: number;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  orientation?: Partial<Orientation>;
 };
 
+// remove once we have drag-to-play-space actions
+const calcX = (y: number, ly: number) => -(y - ly - window.innerHeight / 2) / 20;
+const calcY = (x: number, lx: number) => (x - lx - window.innerWidth / 2) / 20;
+
 const PlayingCard = ({
-  cost,
-  text,
-  title,
-  onClick,
-  imageUrl,
-  isFocused,
-  rotate = 0,
   className = '',
+  orientation,
+  imageUrl,
+  onClick,
+  title,
+  text,
+  cost,
 }: Props) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [{ x, y, rotateX, rotateY, rotateZ, zoom, scale }, api] = useSpring(() => ({
+    rotateX: 0,
+    rotateY: 0,
+    rotateZ: 0,
+    scale: 1,
+    zoom: 0,
+    x: 0,
+    y: 0,
+    ...orientation,
+    config: { mass: 0.25, tension: 20, friction: 2 },
+  }));
+
+  useGesture(
+    {
+      onDrag: ({ active, offset: [x, y] }) =>
+        api({ x, y, rotateX: 0, rotateY: 0, scale: active ? 1 : 0.9 }),
+      onMove: ({ xy: [px, py], dragging }) =>
+        !dragging &&
+        api({
+          rotateX: calcX(py, y.get()),
+          rotateY: calcY(px, x.get()),
+          scale: 1.1,
+        }),
+      onFocus: () => api({ y: -100, rotateX: 0, rotateY: 0, scale: 1.5 }),
+      onBlur: () => api(orientation),
+      onHover: ({ hovering }) => !hovering && api({ rotateX: 0, rotateY: 0, scale: 1 }),
+    },
+    { target: cardRef, eventOptions: { passive: false } }
+  );
 
   useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const dx = (x - centerX) / centerX;
-      const dy = (y - centerY) / centerY;
-
-      const skew = isFocused ? 1.5 : 3;
-      const drift = isFocused ? 5 : 10;
-
-      const skewX = dy * skew; // Skew factor for X-axis
-      const skewY = -dx * skew; // Skew factor for Y-axis
-      const shadowX = dx * 20; // Shadow X-offset
-      const shadowY = dy * 20; // Shadow Y-offset
-      const shadowBlur = 30; // Shadow blur
-
-      const scale = isFocused ? 1.5 : 1.1;
-
-      card.style.transform = `translate(${dx * drift}px, ${
-        dy * drift - (isFocused ? 50 : 0) // FOCUS UPWARD MOVEMENT ALSO REFERENCED IN HAND
-      }px) scale(${scale}) skew(${skewX}deg, ${skewY}deg)`;
-      card.style.boxShadow = `${shadowX}px ${shadowY}px ${shadowBlur}px rgba(0, 0, 0, 0.3)`;
-    };
-
-    card.addEventListener('mousemove', handleMouseMove);
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-      card.style.boxShadow = ''; // Reset to original shadow style
-    });
+    const preventDefault = (e: Event) => e.preventDefault();
+    document.addEventListener('gesturestart', preventDefault);
+    document.addEventListener('gesturechange', preventDefault);
 
     return () => {
-      card.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('gesturestart', preventDefault);
+      document.removeEventListener('gesturechange', preventDefault);
     };
-  }, [isFocused]);
+  }, []);
 
   return (
-    <Card ref={cardRef} rotate={rotate} onClick={onClick} className={['card', className].join(' ')}>
+    <Card
+      ref={cardRef}
+      onClick={onClick}
+      className={['card', className].join(' ')}
+      style={{
+        scale: to([scale, zoom], (s, z) => s + z),
+        transform: 'perspective(600px)',
+        rotateX,
+        rotateY,
+        rotateZ,
+        y,
+        x,
+      }}
+    >
       <CardHeader>
         <Cost>{cost}</Cost>
         <Title>{title}</Title>

@@ -17,7 +17,7 @@ const HandContainer = styled.div`
     transform-origin: bottom center;
   }
 
-  .card.focused {
+  .card:focus {
     transform: scale(1.5) translateY(-50px);
     box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.3);
     z-index: 10;
@@ -43,8 +43,16 @@ const Hand: React.FC<IHandProps> = ({ cards }) => {
             {...card}
             isFocused={isFocused}
             className={isFocused ? 'focused' : undefined}
-            rotate={isFocused ? 0 : ROTATION_ANGLE * offCenter}
-            onClick={() => setFocusedCard(isFocused ? null : index)}
+            orientation={{ rotateZ: isFocused ? 0 : ROTATION_ANGLE * offCenter }}
+            onClick={(e: React.MouseEvent<HTMLElement>) => {
+              console.log(e, e.target, e.currentTarget);
+              setFocusedCard(isFocused ? null : index);
+              if (isFocused) {
+                e.target.dispatchEvent(new Event('blur'));
+              } else {
+                e.target.dispatchEvent(new Event('focus'));
+              }
+            }}
           />
         );
       })}
