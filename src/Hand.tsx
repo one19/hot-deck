@@ -45,7 +45,6 @@ const Hand: React.FC<IHandProps> = ({ cards }) => {
             className={isFocused ? 'focused' : undefined}
             orientation={{ rotateZ: isFocused ? 0 : ROTATION_ANGLE * offCenter }}
             onClick={(e: React.MouseEvent<HTMLElement>) => {
-              console.log(e, e.target, e.currentTarget);
               setFocusedCard(isFocused ? null : index);
               if (isFocused) {
                 e.target.dispatchEvent(new Event('blur'));
