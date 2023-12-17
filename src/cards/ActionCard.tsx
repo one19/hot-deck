@@ -66,14 +66,16 @@ type Orientation = {
 };
 
 export type Props = {
+  id: string;
   cost: number;
-  title: string;
-  imageUrl: string;
   text: string; // to be changed to something dynamically interpretable later
-  isFocused?: boolean;
+  title: string;
+  imageUrl?: string;
   className?: string;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  isFocused?: boolean;
+  imageComponent?: React.ReactNode;
   orientation?: Partial<Orientation>;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
 const DEFAULT = {
@@ -88,6 +90,7 @@ const DEFAULT = {
 
 const PlayingCard = ({
   className = '',
+  imageComponent,
   orientation,
   imageUrl,
   onClick,
@@ -160,7 +163,7 @@ const PlayingCard = ({
           <Cost>{cost}</Cost>
           <Title>{title}</Title>
         </CardHeader>
-        <Image src={imageUrl} alt="Card Image" />
+        {imageComponent ? imageComponent : <Image src={imageUrl} alt="Card Image" />}
         <Text>{text}</Text>
       </Card>
     </Wrapper>

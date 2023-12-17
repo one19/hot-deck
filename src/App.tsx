@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
-import faceUrl from './assets/face-tinyfied.jpg';
-import Hand from './Hand';
+
+import miningCard from './cards/miningCard';
 import PlayArea from './PlayArea';
+import Hand from './Hand';
 
 const PageContainer = styled.div`
   display: flex;
@@ -12,13 +13,7 @@ const PageContainer = styled.div`
   overflow: hidden; /* To prevent scrolling on the page body */
 `;
 
-const cards = [
-  { cost: 5, title: 'Basic Factory', imageUrl: faceUrl, text: 'Turns 6 coal into 2 iron' },
-  { cost: 5, title: 'Basic Factory', imageUrl: faceUrl, text: 'Turns 6 coal into 2 iron' },
-  { cost: 0, title: 'Coal', imageUrl: faceUrl, text: 'Used to power factories' },
-  { cost: 0, title: 'Coal', imageUrl: faceUrl, text: 'Used to power factories' },
-  { cost: 0, title: 'Coal', imageUrl: faceUrl, text: 'Used to power factories' },
-];
+const cards = [miningCard(), miningCard(), miningCard(), miningCard(), miningCard()];
 
 const App = () => (
   <PageContainer>

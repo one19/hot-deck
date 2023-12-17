@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import Card, { type Props as CardProps } from './Card';
+import Card, { type Props as CardProps } from './cards/ActionCard';
 
 const ROTATION_ANGLE = 2.5;
 
@@ -39,7 +39,7 @@ const Hand: React.FC<IHandProps> = ({ cards }) => {
 
         return (
           <Card
-            key={index}
+            key={card.id}
             {...card}
             isFocused={isFocused}
             className={isFocused ? 'focused' : undefined}
