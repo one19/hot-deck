@@ -7,8 +7,8 @@ const Wrapper = styled.div`
   width: 200px;
   height: 300px;
   box-sizing: border-box;
-  touch-action: none;
   position: relative;
+  touch-action: none;
   &:hover {
     z-index: 100;
   }
@@ -19,7 +19,6 @@ const Card = styled(a.div)`
   border-radius: 10px;
   background: linear-gradient(to bottom, #fff, #ddd);
   padding: 10px;
-  touch-action: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: absolute;
   width: 100%;
@@ -33,12 +32,14 @@ const CardBack = styled(Card)`
 const Cost = styled.div`
   font-size: 1em;
   font-weight: bold;
+  user-select: none;
 `;
 
 const Title = styled.div`
   font-size: 1.2em;
   font-weight: bold;
   margin-left: 10px;
+  user-select: none;
 `;
 
 const Image = styled.img`
@@ -50,6 +51,7 @@ const Image = styled.img`
 
 const Text = styled.div`
   font-size: 0.9em;
+  user-select: none;
 `;
 
 const CardHeader = styled.div`
@@ -71,6 +73,7 @@ export type Props = {
   text: string; // to be changed to something dynamically interpretable later
   title: string;
   imageUrl?: string;
+  facedown?: boolean;
   className?: string;
   isFocused?: boolean;
   imageComponent?: React.ReactNode;
@@ -92,21 +95,23 @@ const PlayingCard = ({
   className = '',
   imageComponent,
   orientation,
+  facedown,
   imageUrl,
   onClick,
   title,
   text,
   cost,
 }: Props) => {
-  const [displayBack, setDisplayBack] = useState(false);
+  const [isHovering, setHovering] = useState(false);
   const dimStore = useRef<DOMRect>({} as DOMRect);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const [props, api] = useSpring(() => ({
     ...DEFAULT,
     ...orientation,
-    opacity: displayBack ? 0 : 1,
-    rotateY: displayBack ? 180 : 0,
+    rotateZ: (orientation?.rotateZ ?? DEFAULT.rotateZ) * (facedown ? -1 : 1),
+    opacity: facedown ? 0 : 1,
+    rotateY: facedown ? 180 : 0,
     config: config.stiff,
   }));
 
@@ -116,7 +121,8 @@ const PlayingCard = ({
     -(px - props.x.get() - dimStore.current.x - dimStore.current.width / 2) / 5;
 
   const bind = useGesture({
-    onDrag: ({ hovering, active, offset: [x, y] }) => {
+    onDrag: ({ hovering, active, movement: [x, y] }) => {
+      setHovering(false);
       if (active) {
         api.start({
           x: x,
@@ -134,23 +140,24 @@ const PlayingCard = ({
         });
       }
     },
-    onDoubleClick: () => {
-      setDisplayBack(!displayBack);
-      api.start({
-        opacity: displayBack ? 1 : 0,
-        rotateY: displayBack ? 0 : 180,
-      });
-    },
     onHover: ({ dragging, active }) => {
+      setHovering(true);
       if (!dragging) {
-        api.start({ scale: active ? 1.1 : 1, rotateX: 0, rotateY: displayBack ? 180 : 0 });
+        api.start({ scale: active ? 1.1 : 1, rotateX: 0, rotateY: facedown ? 180 : 0 });
       }
     },
     onMove: ({ dragging, hovering, first, xy: [px, py] }) => {
+      // start by setting the card dims in a non-rerendering way
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       if (first && cardRef.current) dimStore.current = cardRef.current.getBoundingClientRect();
-      if (!dragging && hovering) {
-        api.start({ rotateX: rotX(py), rotateY: rotY(px) + (displayBack ? 180 : 0) });
+
+      if (!dragging && hovering && !isHovering) {
+        // final call on end of dragging phase
+        api.start({ scale: 1 });
+      }
+
+      if (!dragging && hovering && isHovering) {
+        api.start({ rotateX: rotX(py), rotateY: rotY(px) + (facedown ? 180 : 0) });
       }
     },
   });

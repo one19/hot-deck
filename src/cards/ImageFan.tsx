@@ -74,7 +74,7 @@ interface Props {
 const ImageComponent = ({ images }: Props) => (
   <ImageWrapper count={images.length}>
     {images.map((src, index) => (
-      <img key={index} src={src} alt={`Image ${index}`} />
+      <img draggable={false} key={index} src={src} alt={`Image ${index}`} />
     ))}
   </ImageWrapper>
 );

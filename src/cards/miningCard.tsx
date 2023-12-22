@@ -6,10 +6,11 @@ import { coal, copper, gold, oil, rocks, sand, magnetite } from '../assets/resou
 const miningCard = () => {
   const resources = [gold, rocks, coal, copper, magnetite, oil, sand];
   return {
+    cost: 0,
     id: nanoid(),
     title: 'Mining',
-    cost: 0,
     text: 'Gain 1 resource',
+    facedown: Math.random() > 0.5,
     imageComponent: <ImageFan images={resources} />,
   };
 };
