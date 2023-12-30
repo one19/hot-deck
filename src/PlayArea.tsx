@@ -14,6 +14,7 @@ const ScrollableContainer = styled.div`
   }
   &::-webkit-scrollbar-track {
     background: #f0f0f0;
+    border-radius: 6px;
   }
   &::-webkit-scrollbar-thumb {
     background-color: #888;
@@ -25,6 +26,7 @@ const ScrollableContainer = styled.div`
 const LargeContent = styled.div`
   width: 200vw;
   height: 200vh;
+  z-index: var(--z-index-map);
   background-image: linear-gradient(0deg, #f0f4f8 24.5%, rgba(240, 244, 248, 0) 25%),
     linear-gradient(90deg, #f0f4f8 24.5%, rgba(240, 244, 248, 0) 25%),
     linear-gradient(rgba(255, 235, 59, 0.3) 4px, transparent 1px),

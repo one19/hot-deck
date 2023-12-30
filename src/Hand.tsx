@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import Card, { type Props as CardProps } from './cards/ActionCard';
+import Card from './cards/ActionCard';
+import { ActionCardInformation } from './cards/types';
 
 const ROTATION_ANGLE = 2.5;
 
@@ -25,7 +26,7 @@ const HandContainer = styled.div`
 `;
 
 interface IHandProps {
-  cards: CardProps[];
+  cards: ActionCardInformation[];
 }
 
 const Hand: React.FC<IHandProps> = ({ cards }) => {

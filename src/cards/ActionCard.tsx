@@ -3,12 +3,15 @@ import styled from '@emotion/styled';
 import { useSpring, a, config } from '@react-spring/web';
 import { useGesture } from '@use-gesture/react';
 
+import { ActionCardInformation } from './types';
+
 const Wrapper = styled.div`
-  width: 200px;
-  height: 300px;
+  width: var(--card-width);
+  height: var(--card-height);
   box-sizing: border-box;
   position: relative;
   touch-action: none;
+
   &:hover {
     z-index: 100;
   }
@@ -16,7 +19,7 @@ const Wrapper = styled.div`
 
 const Card = styled(a.div)`
   box-sizing: border-box;
-  border-radius: 10px;
+  border-radius: var(--card-border-radius);
   background: linear-gradient(to bottom, #fff, #ddd);
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -59,28 +62,6 @@ const CardHeader = styled.div`
   align-items: center;
 `;
 
-type Orientation = {
-  rotateX: number;
-  rotateZ: number;
-  scale: number;
-  x: number;
-  y: number;
-};
-
-export type Props = {
-  id: string;
-  cost: number;
-  text: string; // to be changed to something dynamically interpretable later
-  title: string;
-  imageUrl?: string;
-  facedown?: boolean;
-  className?: string;
-  isFocused?: boolean;
-  imageComponent?: React.ReactNode;
-  orientation?: Partial<Orientation>;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-};
-
 const DEFAULT = {
   rotateX: 0,
   rotateY: 0,
@@ -95,13 +76,14 @@ const PlayingCard = ({
   className = '',
   imageComponent,
   orientation,
+  disabled,
   facedown,
   imageUrl,
   onClick,
   title,
   text,
   cost,
-}: Props) => {
+}: ActionCardInformation) => {
   const [isHovering, setHovering] = useState(false);
   const dimStore = useRef<DOMRect>({} as DOMRect);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -163,7 +145,12 @@ const PlayingCard = ({
   });
 
   return (
-    <Wrapper className={['card', className].join(' ')} onClick={onClick} ref={cardRef} {...bind()}>
+    <Wrapper
+      ref={cardRef}
+      onClick={onClick}
+      {...(!disabled && bind())}
+      className={['card', className].join(' ')}
+    >
       <CardBack style={{ ...props, opacity: props.opacity.to((o) => 1 - o) }} />
       <Card style={props}>
         <CardHeader>
