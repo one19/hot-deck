@@ -14,6 +14,7 @@ const miningCard = ({ facedown }: ActionCardProps = {}) => {
     facedown,
     id: nanoid(),
     title: 'Mining',
+    variant: 'rawResources',
     text: 'Gain 1 resource',
     imageComponent: <ImageFan images={resources} />,
   };

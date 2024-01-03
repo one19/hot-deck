@@ -47,7 +47,6 @@ const ImageWrapper = styled.div<{ count: number }>`
 
       const startDims = calculateDimensions(startAngle);
       const endDims = calculateDimensions(endAngle);
-      console.log(startAngle, endAngle, startDims, endDims);
 
       if (containsLeftCorner && containsRightCorner) {
         return;

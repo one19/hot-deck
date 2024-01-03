@@ -12,6 +12,7 @@ export type ActionCardInformation = {
   cost: number;
   text: string; // to be changed to something dynamically interpretable later
   title: string;
+  variant?: string;
   imageUrl?: string;
   facedown?: boolean;
   disabled?: boolean;

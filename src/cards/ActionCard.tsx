@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { useSpring, a, config } from '@react-spring/web';
 import { useGesture } from '@use-gesture/react';
+import { getBackground } from './variants';
 
 import { ActionCardInformation } from './types';
 
@@ -17,15 +18,15 @@ const Wrapper = styled.div`
   }
 `;
 
-const Card = styled(a.div)`
+const Card = styled(a.div)<{ variant?: string }>`
   box-sizing: border-box;
   border-radius: var(--card-border-radius);
-  background: linear-gradient(to bottom, #fff, #ddd);
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: absolute;
   width: 100%;
   height: 100%;
+  ${getBackground};
 `;
 const CardBack = styled(Card)`
   background: linear-gradient(to bottom, #fed, #bed);
@@ -79,6 +80,7 @@ const PlayingCard = ({
   disabled,
   facedown,
   imageUrl,
+  variant,
   onClick,
   title,
   text,
@@ -152,7 +154,7 @@ const PlayingCard = ({
       className={['card', className].join(' ')}
     >
       <CardBack style={{ ...props, opacity: props.opacity.to((o) => 1 - o) }} />
-      <Card style={props}>
+      <Card style={props} variant={variant}>
         <CardHeader>
           <Cost>{cost}</Cost>
           <Title>{title}</Title>
