@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import miningCard from './miningCard';
+import miningCard from './getMiningCard';
 import Card from './ActionCard';
 
 import { ActionCardInformation } from './types';

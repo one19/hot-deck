@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
-import miningCard from './cards/miningCard';
+import ResourceCounter from './zoo/ResourceCounter';
+import { GameIdContext } from './providers/GameId';
+import getMiningCard from './cards/getMiningCard';
 import PlayArea from './PlayArea';
 import Pile from './cards/Pile';
 import Hand from './Hand';
@@ -22,14 +25,21 @@ const PageContainer = styled.div`
   --z-index-menus: 2000;
 `;
 
-const cards = [miningCard(), miningCard(), miningCard(), miningCard(), miningCard()];
+const queryClient = new QueryClient();
+
+const cards = [getMiningCard(), getMiningCard(), getMiningCard(), getMiningCard(), getMiningCard()];
 
 const App = () => (
-  <PageContainer>
-    <PlayArea />
-    <Pile infinite facedown cardFactory={miningCard} />
-    <Hand cards={cards} />
-  </PageContainer>
+  <QueryClientProvider client={queryClient}>
+    <GameIdContext.Provider value="test">
+      <PageContainer>
+        <ResourceCounter />
+        <PlayArea />
+        <Pile infinite facedown cardFactory={getMiningCard} />
+        <Hand cards={cards} />
+      </PageContainer>
+    </GameIdContext.Provider>
+  </QueryClientProvider>
 );
 
 export default App;

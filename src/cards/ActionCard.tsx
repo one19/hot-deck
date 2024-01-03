@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { useSpring, a, config } from '@react-spring/web';
 import { useGesture } from '@use-gesture/react';
 import { getBackground } from './variants';
+import { useSetResources } from '../hooks/resources';
 
 import { ActionCardInformation } from './types';
 
@@ -89,6 +90,7 @@ const PlayingCard = ({
   const [isHovering, setHovering] = useState(false);
   const dimStore = useRef<DOMRect>({} as DOMRect);
   const cardRef = useRef<HTMLDivElement>(null);
+  const { mutate } = useSetResources('rawResources');
 
   const [props, api] = useSpring(() => ({
     ...DEFAULT,
@@ -138,6 +140,7 @@ const PlayingCard = ({
       if (!dragging && hovering && !isHovering) {
         // final call on end of dragging phase
         api.start({ scale: 1 });
+        mutate({ copper: 2, coal: 35 }); // FOR TESTING WOOOO
       }
 
       if (!dragging && hovering && isHovering) {

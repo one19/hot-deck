@@ -7,7 +7,7 @@ export type ActionCardProps = {
   facedown?: boolean;
 };
 
-const miningCard = ({ facedown }: ActionCardProps = {}) => {
+const getMiningCard = ({ facedown }: ActionCardProps = {}) => {
   const resources = [gold, rocks, coal, copper, magnetite, oil, sand];
   return {
     cost: 0,
@@ -20,4 +20,4 @@ const miningCard = ({ facedown }: ActionCardProps = {}) => {
   };
 };
 
-export default miningCard;
+export default getMiningCard;
