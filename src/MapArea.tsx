@@ -33,10 +33,10 @@ const LargeContent = styled.div`
   background-position: 2px 2px;
 `;
 
-const MyScrollableComponent = () => (
+const MapArea = () => (
   <ScrollableContainer>
     <LargeContent>{/* Your content here */}</LargeContent>
   </ScrollableContainer>
 );
 
-export default MyScrollableComponent;
+export default MapArea;
