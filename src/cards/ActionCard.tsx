@@ -101,6 +101,7 @@ const PlayingCard = ({
   const [renderSelection, setRenderSelection] = useState(false);
   const dimStore = useRef<DOMRect>({} as DOMRect);
   const cardRef = useRef<HTMLDivElement>(null);
+  const initialOffset = useRef({ x: 0, y: 0 });
   const { mutate } = useSetResources('rawResources');
 
   const [props, api] = useSpring(() => ({
@@ -118,23 +119,31 @@ const PlayingCard = ({
     -(px - props.x.get() - dimStore.current.x - dimStore.current.width / 2) / 5;
 
   const bind = useGesture({
-    onDrag: ({ active, movement: [mx, my] }) => {
+    onDrag: ({ initial, active, movement: [mx, my], first }) => {
       setHovering(false);
       setRenderSelection(true);
       if (active) {
-        if (cardRef.current) {
-          const scale = 0.3; // The scale factor when dragging
-
-          api.start({
-            x: mx,
-            y: my,
-            scale,
-            rotateX: 0,
-            rotateY: props.rotateY.get(),
-          });
+        // Capture the initial offset from the cursor to the center of the card
+        if (first && initial) {
+          const cardCenterX = dimStore.current.x + dimStore.current.width / 2;
+          const cardCenterY = dimStore.current.y + dimStore.current.height / 2;
+          initialOffset.current = {
+            x: initial[0] - cardCenterX,
+            y: initial[1] - cardCenterY,
+          };
         }
+
+        // Apply the initial offset to keep the card centered on the cursor
+        api.start({
+          x: mx + initialOffset.current.x,
+          y: my + initialOffset.current.y,
+          scale: 0.3,
+          rotateX: 0,
+          rotateY: props.rotateY.get(),
+        });
       } else {
-        // where to return to at the end of dragging
+        // return to initial on end of dragging phase
+        initialOffset.current = { x: 0, y: 0 };
         setRenderSelection(false);
         api.start({
           x: 0,
