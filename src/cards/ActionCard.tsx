@@ -7,6 +7,16 @@ import { useSetResources } from '../hooks/resources';
 
 import { ActionCardInformation } from './types';
 
+const ResourceSelectionWrapper = styled.div`
+  position: absolute;
+  width: 90vw;
+  height: 40vh;
+  margin: 0 auto;
+  top: 0;
+  border: 3px solid pink;
+  z-index: calc(var(--z-index-cards) + 100);
+`;
+
 const Wrapper = styled.div`
   width: var(--card-width);
   height: var(--card-height);
@@ -87,7 +97,8 @@ const PlayingCard = ({
   text,
   cost,
 }: ActionCardInformation) => {
-  const [isHovering, setHovering] = useState(false);
+  const [isHovering, setHovering] = useState(true);
+  const [renderSelection, setRenderSelection] = useState(false);
   const dimStore = useRef<DOMRect>({} as DOMRect);
   const cardRef = useRef<HTMLDivElement>(null);
   const { mutate } = useSetResources('rawResources');
@@ -107,29 +118,39 @@ const PlayingCard = ({
     -(px - props.x.get() - dimStore.current.x - dimStore.current.width / 2) / 5;
 
   const bind = useGesture({
-    onDrag: ({ hovering, active, movement: [x, y] }) => {
+    onDrag: ({ active, movement: [mx, my] }) => {
       setHovering(false);
+      setRenderSelection(true);
       if (active) {
-        api.start({
-          x: x,
-          y: y,
-          scale: 1.1,
-          rotateX: 0,
-          rotateY: props.rotateY.get(),
-        });
+        if (cardRef.current) {
+          const scale = 0.3; // The scale factor when dragging
+
+          api.start({
+            x: mx,
+            y: my,
+            scale,
+            rotateX: 0,
+            rotateY: props.rotateY.get(),
+          });
+        }
       } else {
         // where to return to at the end of dragging
+        setRenderSelection(false);
         api.start({
           x: 0,
           y: 0,
-          scale: hovering ? 1.1 : 1,
+          scale: isHovering ? 1.1 : 1,
         });
       }
     },
     onHover: ({ dragging, active }) => {
       setHovering(true);
       if (!dragging) {
-        api.start({ scale: active ? 1.1 : 1, rotateX: 0, rotateY: facedown ? 180 : 0 });
+        api.start({
+          scale: active ? 1.1 : 1,
+          rotateX: 0,
+          rotateY: facedown ? 180 : 0,
+        });
       }
     },
     onMove: ({ dragging, hovering, first, xy: [px, py] }) => {
@@ -144,28 +165,34 @@ const PlayingCard = ({
       }
 
       if (!dragging && hovering && isHovering) {
-        api.start({ rotateX: rotX(py), rotateY: rotY(px) + (facedown ? 180 : 0) });
+        api.start({
+          rotateX: rotX(py),
+          rotateY: rotY(px) + (facedown ? 180 : 0),
+        });
       }
     },
   });
 
   return (
-    <Wrapper
-      ref={cardRef}
-      onClick={onClick}
-      {...(!disabled && bind())}
-      className={['card', className].join(' ')}
-    >
-      <CardBack style={{ ...props, opacity: props.opacity.to((o) => 1 - o) }} />
-      <Card style={props} variant={variant}>
-        <CardHeader>
-          <Cost>{cost}</Cost>
-          <Title>{title}</Title>
-        </CardHeader>
-        {imageComponent ? imageComponent : <Image src={imageUrl} alt="Card Image" />}
-        <Text>{text}</Text>
-      </Card>
-    </Wrapper>
+    <>
+      <Wrapper
+        ref={cardRef}
+        onClick={onClick}
+        {...(!disabled && bind())}
+        className={['card', className].join(' ')}
+      >
+        <CardBack style={{ ...props, opacity: props.opacity.to((o) => 1 - o) }} />
+        <Card style={props} variant={variant}>
+          <CardHeader>
+            <Cost>{cost}</Cost>
+            <Title>{title}</Title>
+          </CardHeader>
+          {imageComponent ? imageComponent : <Image src={imageUrl} alt="Card Image" />}
+          <Text>{text}</Text>
+        </Card>
+      </Wrapper>
+      {renderSelection && <ResourceSelectionWrapper />}
+    </>
   );
 };
 
