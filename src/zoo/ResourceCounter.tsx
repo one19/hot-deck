@@ -7,12 +7,21 @@ const Wrapper = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  padding: 10px;
-  background: #fff;
 `;
 
 const VariantWrapper = styled.div<{ variant: string }>`
   ${getBackground};
+  margin: 0.5em;
+  border-radius: 0.5em;
+  padding: 0.5em;
+`;
+
+const Resource = styled.div`
+  display: flex;
+  justify-content: space-between;
+  div:first-of-type {
+    margin-right: 0.5em;
+  }
 `;
 
 const ResourceCounter = () => {
@@ -28,9 +37,10 @@ const ResourceCounter = () => {
       {resourceVariants.map((variant) => (
         <VariantWrapper key={`counter-${variant.id}`} variant={variant.id}>
           {Object.entries(variant.state).map(([key, value]) => (
-            <div key={`counter-${variant.id}-${key}`}>
-              {key}: {value}
-            </div>
+            <Resource key={`counter-${variant.id}-${key}`}>
+              <div>{key}</div>
+              <div>{value}</div>
+            </Resource>
           ))}
         </VariantWrapper>
       ))}
