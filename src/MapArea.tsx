@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 
 const ScrollableContainer = styled.div`
+  position: absolute;
+  top: 5vh;
+  left: 5vw;
   width: 90vw;
   height: 90vh;
   overflow: auto;

@@ -55,9 +55,9 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <Global styles={globalStyles} />
     <GameIdContext.Provider value="test">
+      <MapArea />
       <PlayArea id="root">
         <ResourceCounter />
-        <MapArea />
         <Hand cards={cards} />
       </PlayArea>
     </GameIdContext.Provider>
