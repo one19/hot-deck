@@ -41,6 +41,10 @@ const PlayArea = styled.div`
   --z-index-map: 0;
   --z-index-cards: 1000;
   --z-index-menus: 2000;
+
+  --spotlight-x: 50%;
+  --spotlight-y: 50%;
+  --spotlight-intensity: 0;
 `;
 
 const queryClient = new QueryClient();

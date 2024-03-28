@@ -4,8 +4,31 @@ import { useSpring, a, config } from '@react-spring/web';
 import { useGesture } from '@use-gesture/react';
 import { getBackground } from './variants';
 import { useSetResources } from '../hooks/resources';
+import grainUrl from '../assets/zoo/grain.webp';
 
 import { ActionCardInformation } from './types';
+
+const GrainOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background-image: url('${grainUrl}');
+  background-size: var(--card-width) 100%;
+  pointer-events: none;
+  mix-blend-mode: plus-lighter;
+  border-radius: var(--card-border-radius);
+`;
+
+const SpotlightOverlay = styled(a.div)`
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(255, 255, 255, var(--spotlight-intensity)),
+    transparent
+  );
+  pointer-events: none;
+  border-radius: var(--card-border-radius);
+`;
 
 const ResourceSelectionWrapper = styled.div`
   position: absolute;
@@ -13,16 +36,17 @@ const ResourceSelectionWrapper = styled.div`
   height: 40vh;
   margin: 0 auto;
   top: 0;
-  border: 3px solid pink;
   z-index: calc(var(--z-index-cards) + 100);
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(a.div)`
   width: var(--card-width);
   height: var(--card-height);
   box-sizing: border-box;
   position: relative;
   touch-action: none;
+  will-change: transform, opacity;
+  border-radius: var(--card-border-radius);
 
   &:hover {
     z-index: 100;
@@ -85,7 +109,6 @@ const DEFAULT = {
 };
 
 const PlayingCard = ({
-  className = '',
   imageComponent,
   orientation,
   disabled,
@@ -152,7 +175,7 @@ const PlayingCard = ({
         });
       }
     },
-    onHover: ({ dragging, active }) => {
+    onHover: ({ dragging, active, last }) => {
       setHovering(true);
       if (!dragging) {
         api.start({
@@ -161,35 +184,42 @@ const PlayingCard = ({
           rotateY: facedown ? 180 : 0,
         });
       }
+      if (last) {
+        cardRef?.current?.style.setProperty('--spotlight-intensity', '0');
+      }
     },
-    onMove: ({ dragging, hovering, first, xy: [px, py] }) => {
+    onMove: ({ dragging, hovering, first, last, xy: [px, py] }) => {
       // start by setting the card dims in a non-rerendering way
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       if (first && cardRef.current) dimStore.current = cardRef.current.getBoundingClientRect();
 
-      if (!dragging && hovering && !isHovering) {
+      if (last && !dragging && hovering && !isHovering) {
         // final call on end of dragging phase
         api.start({ scale: 1 });
         mutate({ copper: 2, coal: 35 }); // FOR TESTING WOOOO
+        cardRef?.current?.style.setProperty('--spotlight-intensity', '0');
       }
 
       if (!dragging && hovering && isHovering) {
+        if (!cardRef.current) return;
         api.start({
           rotateX: rotX(py),
           rotateY: rotY(px) + (facedown ? 180 : 0),
         });
+
+        const x = (px - dimStore.current.left) / dimStore.current.width;
+        const y = (py - dimStore.current.top) / dimStore.current.height;
+
+        cardRef.current.style.setProperty('--spotlight-x', `${x * 100}%`);
+        cardRef.current.style.setProperty('--spotlight-y', `${y * 100}%`);
+        cardRef.current.style.setProperty('--spotlight-intensity', '0.2');
       }
     },
   });
 
   return (
     <>
-      <Wrapper
-        ref={cardRef}
-        onClick={onClick}
-        {...(!disabled && bind())}
-        className={['card', className].join(' ')}
-      >
+      <Wrapper ref={cardRef} onClick={onClick} {...(!disabled && bind())}>
         <CardBack style={{ ...props, opacity: props.opacity.to((o) => 1 - o) }} />
         <Card style={props} variant={variant}>
           <CardHeader>
@@ -198,6 +228,8 @@ const PlayingCard = ({
           </CardHeader>
           {imageComponent ? imageComponent : <Image src={imageUrl} alt="Card Image" />}
           <Text>{text}</Text>
+          <GrainOverlay />
+          <SpotlightOverlay />
         </Card>
       </Wrapper>
       {renderSelection && <ResourceSelectionWrapper />}
