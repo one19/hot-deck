@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import styled from '@emotion/styled';
 import { Global, css } from '@emotion/react';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
@@ -7,20 +8,14 @@ import { GameIdContext } from './providers/GameId';
 import getMiningCard from './cards/getMiningCard';
 import MapArea from './MapArea';
 import Hand from './Hand';
+import Pile from './cards/Pile';
+import { ActionCardInformation } from './cards/types';
 
 const globalStyles = css`
   html,
-  body,
-  #root {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden; /* To prevent scrolling on the page body */
-  }
-
   body {
     font-family: sans-serif;
+    margin: 0;
   }
 `;
 
@@ -31,8 +26,18 @@ const PlayArea = styled.div`
   margin: 0;
   overflow: hidden; /* To prevent scrolling on the page body */
 
-  grid-template-columns: [left] 0 [map-left] 5vw [map-right] 90vw [right] 100vw;
-  grid-template-rows: [top] 0 [map-top] 10% [map-bottom] 90% [bottom];
+  grid-template-columns:
+    [left] 5px
+    [draw] calc(200px + 5px)
+    [play-area-start] 1fr
+    [hand] 1000px
+    [hand-end] 1fr
+    [play-area-end discard] calc(200px + 5px)
+    [right] 5px;
+  grid-template-rows:
+    [top] 100px
+    [play-area] 1fr
+    [hand] 280px;
 
   --card-width: 200px;
   --card-height: 280px;
@@ -49,19 +54,47 @@ const PlayArea = styled.div`
 
 const queryClient = new QueryClient();
 
-const cards = [getMiningCard(), getMiningCard(), getMiningCard(), getMiningCard(), getMiningCard()];
+const App = () => {
+  const [drawPile, setDrawPile] = useState<ActionCardInformation[]>([
+    getMiningCard(),
+    getMiningCard(),
+    getMiningCard(),
+    getMiningCard(),
+    getMiningCard(),
+  ]);
+  const [hand, setHand] = useState<ActionCardInformation[]>([
+    getMiningCard(),
+    getMiningCard(),
+    getMiningCard(),
+    getMiningCard(),
+    getMiningCard(),
+  ]);
+  const [discards, setDiscards] = useState<ActionCardInformation[]>([]);
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <Global styles={globalStyles} />
-    <GameIdContext.Provider value="test">
-      <MapArea />
-      <PlayArea id="root">
-        <ResourceCounter />
-        <Hand cards={cards} />
-      </PlayArea>
-    </GameIdContext.Provider>
-  </QueryClientProvider>
-);
+  const discard = useCallback(
+    (id: string) => {
+      const card = hand.find((c) => c.id === id);
+      if (!card) throw new Error('Discarded card not found');
 
+      setHand((hand) => hand.filter((c) => c.id !== id));
+      setDiscards((discards) => [...discards, card]);
+    },
+    [hand, setHand, setDiscards]
+  );
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Global styles={globalStyles} />
+      <GameIdContext.Provider value="test">
+        <MapArea />
+        <PlayArea id="play-area">
+          <Pile draw cards={drawPile} setCards={setDrawPile} facedown />
+          <ResourceCounter />
+          <Hand cards={hand} discard={discard} />
+          <Pile discard cards={discards} setCards={setDiscards} facedown />
+        </PlayArea>
+      </GameIdContext.Provider>
+    </QueryClientProvider>
+  );
+};
 export default App;

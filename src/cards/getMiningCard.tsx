@@ -1,22 +1,30 @@
 import { nanoid } from 'nanoid';
 
-import ImageFan from './ImageFan';
-import { coal, copper, gold, oil, rocks, sand, magnetite } from '../assets/resources/raw';
+import { coal, copper, gold, oil, rock, sand, magnetite } from '../assets/resources/raw';
 
-export type ActionCardProps = {
+export type MiningCardProps = {
   facedown?: boolean;
 };
 
-const getMiningCard = ({ facedown }: ActionCardProps = {}) => {
-  const resources = [gold, rocks, coal, copper, magnetite, oil, sand];
+const getMiningCard = ({ facedown }: MiningCardProps = {}) => {
+  const resources = [
+    { name: 'gold', image: gold },
+    { name: 'rock', image: rock },
+    { name: 'coal', image: coal },
+    { name: 'copper', image: copper },
+    { name: 'magnetite', image: magnetite },
+    { name: 'oil', image: oil },
+    { name: 'sand', image: sand },
+  ];
   return {
     cost: 0,
     facedown,
     id: nanoid(),
     title: 'Mining',
+    discard: () => {},
     variant: 'rawResources',
     text: 'Gain 1 resource',
-    imageComponent: <ImageFan images={resources} />,
+    resources,
   };
 };
 

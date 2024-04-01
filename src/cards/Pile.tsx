@@ -1,36 +1,38 @@
 import styled from '@emotion/styled';
 
 import miningCard from './getMiningCard';
-import Card from './ActionCard';
+import Card from './MiningCard';
 
 import { ActionCardInformation } from './types';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ draw?: boolean; discard?: boolean }>`
   --card-overlap: 5px;
 
-  position: absolute;
+  position: relative;
+  display: inline-flex;
   z-index: var(--z-index-cards);
-  left: 0;
+  ${({ draw }) => draw && 'grid-area: hand / draw;'}
+  ${({ discard }) => discard && 'grid-area: hand / discard;'}
 
   .card {
     position: absolute;
   }
-  .card:nth-child(2) {
+  .card:nth-of-type(2) {
     z-index: -1;
     top: var(--card-overlap);
     left: var(--card-overlap);
   }
-  .card:nth-child(3) {
+  .card:nth-of-type(3) {
     z-index: -2;
     top: calc(var(--card-overlap) * 2);
     left: calc(var(--card-overlap) * 2);
   }
-  .card:nth-child(4) {
+  .card:nth-of-type(4) {
     z-index: -3;
     top: calc(var(--card-overlap) * 3);
     left: calc(var(--card-overlap) * 3);
   }
-  .card:nth-child(5) {
+  .card:nth-of-type(5) {
     z-index: -4;
     top: calc(var(--card-overlap) * 4);
     left: calc(var(--card-overlap) * 4);
@@ -42,7 +44,7 @@ const InfinityBox = styled.div`
   width: var(--card-width);
 
   background: palegoldenrod;
-  position: absolute;
+  display: flex;
 
   box-shadow:
     4px 4px 0 0 #d6d099,
@@ -53,12 +55,15 @@ const InfinityBox = styled.div`
 `;
 
 type Props = {
+  draw?: boolean;
+  discard?: boolean;
   infinite?: boolean;
   facedown?: boolean;
   cardFactory?: typeof miningCard;
   cards?: ActionCardInformation[];
+  setCards: (cards: ActionCardInformation[]) => void;
 };
-const Pile = ({ infinite, facedown, cardFactory, cards }: Props) => {
+const Pile = ({ draw, discard, infinite, facedown, cardFactory, cards }: Props) => {
   // when in the tech tree
   if (!cards && cardFactory) {
     return (
@@ -75,7 +80,7 @@ const Pile = ({ infinite, facedown, cardFactory, cards }: Props) => {
   if (!cards) return null;
 
   return (
-    <Wrapper>
+    <Wrapper draw={draw} discard={discard}>
       {cards.map((card) => (
         <Card key={card.id} {...card} facedown={facedown} />
       ))}

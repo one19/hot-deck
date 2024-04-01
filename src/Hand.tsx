@@ -1,17 +1,13 @@
-import React from 'react';
 import styled from '@emotion/styled';
-import Card from './cards/ActionCard';
+import Card from './cards/MiningCard';
 import { ActionCardInformation } from './cards/types';
 
 const ROTATION_ANGLE = 2.5;
 
 const HandContainer = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: -5px;
+  grid-area: hand;
+  display: inline-flex;
+  justify-content: center;
 
   .card {
     transition: transform 0.3s ease;
@@ -25,39 +21,26 @@ const HandContainer = styled.div`
   }
 `;
 
-interface IHandProps {
+type HandProps = {
   cards: ActionCardInformation[];
-}
-
-const Hand: React.FC<IHandProps> = ({ cards }) => {
-  const [focusedCard, setFocusedCard] = React.useState<number | null>(null);
-
-  return (
-    <HandContainer>
-      {cards.map((card, index) => {
-        const isFocused = focusedCard === index;
-        const offCenter = index - Math.floor(cards.length / 2);
-
-        return (
-          <Card
-            key={card.id}
-            {...card}
-            isFocused={isFocused}
-            className={isFocused ? 'focused' : undefined}
-            orientation={{ rotateZ: isFocused ? 0 : ROTATION_ANGLE * offCenter }}
-            onClick={(e: React.MouseEvent<HTMLElement>) => {
-              setFocusedCard(isFocused ? null : index);
-              if (isFocused) {
-                e.target.dispatchEvent(new Event('blur'));
-              } else {
-                e.target.dispatchEvent(new Event('focus'));
-              }
-            }}
-          />
-        );
-      })}
-    </HandContainer>
-  );
+  discard: (id: string) => void;
 };
+
+const Hand = ({ cards, discard }: HandProps) => (
+  <HandContainer>
+    {cards.map((card, index) => {
+      const offCenter = index - Math.floor(cards.length / 2);
+
+      return (
+        <Card
+          key={card.id}
+          {...card}
+          discard={() => discard(card.id)}
+          orientation={{ rotateZ: ROTATION_ANGLE * offCenter }}
+        />
+      );
+    })}
+  </HandContainer>
+);
 
 export default Hand;

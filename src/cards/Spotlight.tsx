@@ -8,7 +8,7 @@ const SpotlightOverlay = styled(a.div)`
   border-radius: var(--card-border-radius);
 `;
 
-const Spotlight = ({ parentRef }) => {
+const Spotlight = (/* { parentRef } */) => {
   const [spotlightProps] = useSpring(() => ({
     spotlightX: '50%',
     spotlightY: '50%',

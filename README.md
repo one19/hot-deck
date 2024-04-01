@@ -1,3 +1,3 @@
-# untitled obsession
+# untitled deck game
 
-keep up the good work dude
+WIP. Gotta keep W in progressing.
