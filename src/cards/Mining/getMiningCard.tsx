@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-import { coal, copper, gold, oil, rock, sand, magnetite } from '../assets/resources/raw';
+import { coal, copper, gold, oil, rock, sand, magnetite } from '../../assets/resources/raw';
 
 export type MiningCardProps = {
   facedown?: boolean;

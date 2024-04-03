@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Card from './cards/MiningCard';
+import Card from './cards/Mining/Card';
 import { ActionCardInformation } from './cards/types';
 
 const ROTATION_ANGLE = 2.5;

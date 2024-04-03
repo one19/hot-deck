@@ -5,7 +5,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 import ResourceCounter from './zoo/ResourceCounter';
 import { GameIdContext } from './providers/GameId';
-import getMiningCard from './cards/getMiningCard';
+import getMiningCard from './cards/Mining/getMiningCard';
 import MapArea from './MapArea';
 import Hand from './Hand';
 import Pile from './cards/Pile';

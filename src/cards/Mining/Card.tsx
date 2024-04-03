@@ -3,12 +3,14 @@ import { useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { useSpring, a, config } from '@react-spring/web';
 import { useGesture } from '@use-gesture/react';
-import { getBackground } from './variants';
-import ImageFan from './ImageFan';
-import { useSetResources } from '../hooks/resources';
-import grainUrl from '../assets/zoo/grain.webp';
+import { getBackground } from '../variants';
+import ImageFan from '../ImageFan';
+import { useSetResources } from '../../hooks/resources';
+import { Title } from '../../zoo/Styled';
+import grainUrl from '../../assets/zoo/grain.webp';
+import ResourceSelector from './ResourceSelector';
 
-import { ActionCardInformation } from './types';
+import { ActionCardInformation } from '../types';
 
 const GrainOverlay = styled.div`
   position: absolute;
@@ -40,6 +42,7 @@ const Wrapper = styled(a.div)`
   touch-action: none;
   will-change: transform, opacity;
   border-radius: var(--card-border-radius);
+  z-index: var(--z-index-cards);
 
   &:hover {
     z-index: 100;
@@ -62,26 +65,13 @@ const CardBack = styled(Card)`
 `;
 
 const Cost = styled.div`
-  font-size: 1em;
+  font-size: 2em;
+  margin-right: 0.25em;
   font-weight: bold;
   user-select: none;
 `;
 
-const Title = styled.div`
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-left: 10px;
-  user-select: none;
-`;
-
-const Image = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 5px;
-  margin: 10px 0;
-`;
-
-const Text = styled.div`
+const Text = styled.p`
   font-size: 0.9em;
   user-select: none;
 `;
@@ -90,65 +80,6 @@ const CardHeader = styled.div`
   display: flex;
   align-items: center;
 `;
-
-const ResourceSelectionWrapper = styled.div`
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  grid-area: play-area;
-  justify-content: center;
-  z-index: calc(var(--z-index-map) + 1);
-`;
-
-const Resources = styled.div`
-  background: #3333;
-  border: 3px solid #1111;
-  margin-top: 5px;
-  border-radius: 5px;
-  display: inline-flex;
-  justify-content: space-around;
-`;
-
-const ResourceBlock = styled.div`
-  border: 3px solid #1111;
-  display: flex;
-  width: 100%;
-  padding: 5px 0;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const ResourceSelector = ({
-  resources,
-  hoveredResourceRef,
-}: {
-  resources: { name: string; image: string }[];
-  hoveredResourceRef: React.MutableRefObject<string | null>;
-}) => {
-  return (
-    <ResourceSelectionWrapper>
-      <Title>Select a resource</Title>
-      <Resources>
-        {resources.map((r) => (
-          <ResourceBlock
-            key={`selector-${r.name}`}
-            id={`selector-${r.name}`}
-            onMouseEnter={() => {
-              hoveredResourceRef.current = r.name;
-            }}
-            onMouseLeave={() => {
-              hoveredResourceRef.current = null;
-            }}
-          >
-            <Image src={r.image} alt={`select ${r.name}`} />
-            <Title>{r.name}</Title>
-          </ResourceBlock>
-        ))}
-      </Resources>
-    </ResourceSelectionWrapper>
-  );
-};
 
 const DEFAULT = {
   rotateX: 0,
@@ -209,6 +140,8 @@ const PlayingCard = ({
               x: initial[0] - cardCenterX,
               y: initial[1] - cardCenterY,
             };
+            if (!cardRef.current) return;
+            cardRef.current.style.setProperty('pointer-events', 'none');
           }
 
           // Apply the initial offset to keep the card centered on the cursor
@@ -235,6 +168,8 @@ const PlayingCard = ({
             y: 0,
             scale: isHovering ? 1.1 : 1,
           });
+          if (!cardRef.current) return;
+          cardRef.current.style.setProperty('pointer-events', 'auto');
         }
       },
       onHover: ({ dragging, active, last }) => {
@@ -253,7 +188,10 @@ const PlayingCard = ({
       onMove: ({ dragging, hovering, first, last, xy: [px, py] }) => {
         // start by setting the card dims in a non-rerendering way
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        if (first && cardRef.current) dimStore.current = cardRef.current.getBoundingClientRect();
+        if (first && cardRef.current) {
+          dimStore.current = cardRef.current.getBoundingClientRect();
+          cardRef.current.style.setProperty('--spotlight-intensity', '0.2');
+        }
 
         if (last && !dragging && hovering && !isHovering) {
           // final call on end of dragging phase
@@ -273,7 +211,6 @@ const PlayingCard = ({
 
           cardRef.current.style.setProperty('--spotlight-x', `${x * 100}%`);
           cardRef.current.style.setProperty('--spotlight-y', `${y * 100}%`);
-          cardRef.current.style.setProperty('--spotlight-intensity', '0.2');
         }
       },
     },
