@@ -9,8 +9,11 @@ import { useSetResources } from '../../hooks/resources';
 import { Title } from '../../zoo/Styled';
 import grainUrl from '../../assets/zoo/grain.webp';
 import ResourceSelector from './ResourceSelector';
+import { Canvas } from '@react-three/fiber';
+import { Color } from 'three';
 
 import { ActionCardInformation } from '../types';
+import TopographyWrapper from '../Shaders/TopographyMultiply';
 
 const GrainOverlay = styled.div`
   position: absolute;
@@ -236,6 +239,9 @@ const PlayingCard = ({
           <Text>{text}</Text>
           <GrainOverlay />
           <SpotlightOverlay />
+          <Canvas style={{ position: 'absolute', top: 0, left: 0 }}>
+            <TopographyWrapper color={new Color(1, 0, 0)} />
+          </Canvas>
         </Card>
       </Wrapper>
     </>
