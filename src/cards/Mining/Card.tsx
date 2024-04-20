@@ -10,6 +10,7 @@ import { Title } from '../../zoo/Styled';
 import grainUrl from '../../assets/zoo/grain.webp';
 import ResourceSelector from './ResourceSelector';
 import { Canvas } from '@react-three/fiber';
+// import useWiggle from './useWiggle';
 
 import { ActionCardInformation } from '../types';
 import RainbowMultiply from '../Shaders/RainbowMultiply';
@@ -133,6 +134,8 @@ const PlayingCard = ({
     rotateY: facedown ? 180 : 0,
     config: config.stiff,
   }));
+
+  // useWiggle(api, props.rotateZ.get());
 
   const rotX = (py: number) =>
     (py - props.y.get() - dimStore.current.y - dimStore.current.height / 2) / 5;
