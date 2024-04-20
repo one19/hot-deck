@@ -10,10 +10,15 @@ import { Title } from '../../zoo/Styled';
 import grainUrl from '../../assets/zoo/grain.webp';
 import ResourceSelector from './ResourceSelector';
 import { Canvas } from '@react-three/fiber';
-import { Color } from 'three';
 
 import { ActionCardInformation } from '../types';
-import TopographyWrapper from '../Shaders/TopographyMultiply';
+import RainbowMultiply from '../Shaders/RainbowMultiply';
+
+const StyledCanvas = styled(Canvas)`
+  border-radius: var(--card-border-radius);
+  top: 0;
+  left: 0;
+`;
 
 const GrainOverlay = styled.div`
   position: absolute;
@@ -60,7 +65,6 @@ const Card = styled(a.div)<{ variant?: string }>`
   box-sizing: border-box;
   border-radius: var(--card-border-radius);
   padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: absolute;
   width: 100%;
   height: 100%;

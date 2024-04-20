@@ -23,6 +23,7 @@ const getMiningCard = ({ facedown }: MiningCardProps = {}) => {
     title: 'Mining',
     discard: () => {},
     variant: 'rawResources',
+    shiny: Math.random() > 0.75,
     text: 'Gain 1 resource',
     resources,
   };
