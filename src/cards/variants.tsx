@@ -21,10 +21,10 @@ const rawResources = `
   background-color: #666;
   background-image: url('data:image/svg+xml,\
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="-50 -50 250 250">\
-<polygon points="50,0 75,25 50,50 25,25" fill="black" fill-opacity="0.3"/>\
-<polygon points="50,60 75,85 50,110 25,85" fill="black" fill-opacity="0.3"/>\
-<polygon points="-5,55 20,30 45,55 20,80" fill="black" fill-opacity="0.3"/>\
-<polygon points="105,55 80,30 55,55 80,80" fill="black" fill-opacity="0.3"/>\
+<polygon points="50,0 75,25 50,50 25,25" fill="black" fill-opacity="0.2"/>\
+<polygon points="50,60 75,85 50,110 25,85" fill="black" fill-opacity="0.2"/>\
+<polygon points="-5,55 20,30 45,55 20,80" fill="black" fill-opacity="0.2"/>\
+<polygon points="105,55 80,30 55,55 80,80" fill="black" fill-opacity="0.2"/>\
 </svg>');
   background-size: 25px 25px;
 `;

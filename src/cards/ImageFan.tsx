@@ -26,6 +26,8 @@ const ImageWrapper = styled.div<{ count: number }>`
   position: relative;
   width: 180px; // Set a fixed width
   height: 180px; // Set a fixed height
+  pointer-events: none;
+  user-select: none;
 
   img {
     position: absolute;

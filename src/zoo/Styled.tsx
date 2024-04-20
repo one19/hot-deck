@@ -12,4 +12,6 @@ export const Image = styled.img`
   height: 100px;
   border-radius: 5px;
   margin: 10px 0;
+  pointer-events: none;
+  user-select: none;
 `;

@@ -48,7 +48,11 @@ const Wrapper = styled(a.div)`
   z-index: var(--z-index-cards);
 
   &:hover {
-    z-index: 100;
+    z-index: calc(var(--z-index-cards) + 1);
+  }
+
+  &[data-grabbed='true'] {
+    z-index: calc(var(--z-index-cards) + 2);
   }
 `;
 
@@ -101,11 +105,13 @@ const PlayingCard = ({
   facedown,
   discard,
   variant,
+  shiny,
   title,
   text,
   cost,
 }: ActionCardInformation) => {
-  const [isHovering, setHovering] = useState(true);
+  const [isHovering, setHovering] = useState(false);
+  const [isDragging, setDragging] = useState(false);
   const [renderSelection, setRenderSelection] = useState(false);
   const dimStore = useRef<DOMRect>({} as DOMRect);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -133,6 +139,7 @@ const PlayingCard = ({
     {
       onDrag: ({ initial, active, movement: [mx, my], first }) => {
         setHovering(false);
+        setDragging(true);
         setRenderSelection(true);
         if (active) {
           // Capture the initial offset from the cursor to the center of the card
@@ -164,6 +171,7 @@ const PlayingCard = ({
           setTimeout(() => discard(), DURATION);
         } else {
           // return to initial on end of dragging phase
+          setDragging(false);
           initialOffset.current = { x: 0, y: 0 };
           setRenderSelection(false);
           api.start({
@@ -222,13 +230,12 @@ const PlayingCard = ({
 
   return (
     <>
-      {playArea &&
-        renderSelection &&
-        createPortal(
-          <ResourceSelector resources={resources} hoveredResourceRef={hoveredResourceRef} />,
-          playArea
-        )}
-      <Wrapper className="card" ref={cardRef} {...(!disabled && bind())}>
+      <Wrapper
+        ref={cardRef}
+        className="card"
+        data-grabbed={`${isDragging}`}
+        {...(!disabled && bind())}
+      >
         <CardBack style={{ ...props, opacity: props.opacity.to((o) => 1 - o) }} />
         <Card style={props} variant={variant}>
           <CardHeader>
@@ -239,11 +246,19 @@ const PlayingCard = ({
           <Text>{text}</Text>
           <GrainOverlay />
           <SpotlightOverlay />
-          <Canvas style={{ position: 'absolute', top: 0, left: 0 }}>
-            <TopographyWrapper color={new Color(1, 0, 0)} />
-          </Canvas>
+          {shiny && (
+            <StyledCanvas style={{ position: 'absolute', pointerEvents: 'none' }}>
+              <RainbowMultiply {...props} />
+            </StyledCanvas>
+          )}
         </Card>
       </Wrapper>
+      {playArea &&
+        renderSelection &&
+        createPortal(
+          <ResourceSelector resources={resources} hoveredResourceRef={hoveredResourceRef} />,
+          playArea
+        )}
     </>
   );
 };

@@ -7,6 +7,7 @@ const Wrapper = styled.div`
   position: absolute;
   top: 0;
   right: 0;
+  user-select: none;
 `;
 
 const VariantWrapper = styled.div<{ variant: string }>`
