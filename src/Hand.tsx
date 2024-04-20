@@ -29,7 +29,7 @@ type HandProps = {
 const Hand = ({ cards, discard }: HandProps) => (
   <HandContainer>
     {cards.map((card, index) => {
-      const offCenter = index - Math.floor(cards.length / 2);
+      const offCenter = index + 0.5 - cards.length / 2;
 
       return (
         <Card

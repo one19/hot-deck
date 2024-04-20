@@ -126,14 +126,17 @@ const PlayingCard = ({
 
   const playArea = document.getElementById('play-area');
 
-  const [props, api] = useSpring(() => ({
-    ...DEFAULT,
-    ...orientation,
-    rotateZ: (orientation?.rotateZ ?? DEFAULT.rotateZ) * (facedown ? -1 : 1),
-    opacity: facedown ? 0 : 1,
-    rotateY: facedown ? 180 : 0,
-    config: config.stiff,
-  }));
+  const [props, api] = useSpring(
+    () => ({
+      ...DEFAULT,
+      ...orientation,
+      rotateZ: (orientation?.rotateZ ?? DEFAULT.rotateZ) * (facedown ? -1 : 1),
+      opacity: facedown ? 0 : 1,
+      rotateY: facedown ? 180 : 0,
+      config: config.stiff,
+    }),
+    [orientation]
+  );
 
   // useWiggle(api, props.rotateZ.get());
 
@@ -262,6 +265,7 @@ const PlayingCard = ({
       </Wrapper>
       {playArea &&
         renderSelection &&
+        !facedown &&
         createPortal(
           <ResourceSelector resources={resources} hoveredResourceRef={hoveredResourceRef} />,
           playArea
