@@ -10,6 +10,7 @@ import MapArea from './MapArea';
 import Hand from './Hand';
 import Pile from './cards/Pile';
 import { ActionCardInformation } from './cards/types';
+import Scanlines from './cards/Shaders/Scanlines';
 
 const globalStyles = css`
   html,
@@ -86,6 +87,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <Global styles={globalStyles} />
       <GameIdContext.Provider value="test">
+        <Scanlines />
         <MapArea />
         <PlayArea id="play-area">
           <Pile draw cards={drawPile} setCards={setDrawPile} facedown />
