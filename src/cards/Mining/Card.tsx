@@ -52,6 +52,7 @@ const Wrapper = styled(a.div)`
   will-change: transform, opacity;
   border-radius: var(--card-border-radius);
   z-index: var(--z-index-cards);
+  perspective: 800px;
 
   &:hover {
     z-index: calc(var(--z-index-cards) + 1);
