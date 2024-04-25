@@ -92,6 +92,30 @@ const buildings = `
     7px 12px;
 `;
 
+const actionBackground = `
+  background-color: #32CD32; /* Lime green base */
+  background-image: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.2) 25%, rgba(255,255,255,0.2) 50%, transparent 50%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2)),
+                    linear-gradient(45deg, transparent 25%, rgba(0,0,0,0.2) 25%, rgba(0,0,0,0.2) 50%, transparent 50%, transparent 75%, rgba(0,0,0,0.2) 75%, rgba(0,0,0,0.2));
+  background-size: 60px 60px;
+  background-position: 0 0, 30px 30px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: 4px;
+    background:
+      repeating-radial-gradient(#000 0 0.0001%,#fff 0 0.0002%)
+      60% 60%/3000px 3000px,
+      repeating-conic-gradient(#000 0 0.0001%,#fff 0 0.0002%)
+      40% 40%/4000px 3000px;
+    background-blend-mode: difference;
+    filter: blur(2px) contrast(100) brightness(40);
+    mix-blend-mode: lighten;
+    opacity: 0.1;
+  }
+`;
+
 type Props = { variant?: string };
 export const getBackground = ({ variant = '' }: Props) =>
-  ({ rawResources, money, buildings })[variant] || failureBackground;
+  ({ rawResources, money, buildings, actionBackground })[variant] || failureBackground;
