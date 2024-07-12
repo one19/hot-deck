@@ -1,3 +1,3 @@
 # untitled deck game
 
-WIP. Gotta keep W in progressing.
+WIP. Gotta keep progressing.
