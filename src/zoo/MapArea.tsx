@@ -31,32 +31,26 @@ const LargeContent = styled.div`
   width: 200vw;
   height: 200vh;
   z-index: var(--z-index-map);
-  background-color: #f1f4f8; /* Light grey/blue typical of blueprint background */
-  background-image: linear-gradient(
-      0deg,
-      transparent 24%,
-      rgba(200, 200, 255, 0.5) 25%,
-      rgba(200, 200, 255, 0.5) 26%,
-      transparent 27%,
-      transparent 74%,
-      rgba(200, 200, 255, 0.5) 75%,
-      rgba(200, 200, 255, 0.5) 76%,
-      transparent 77%,
+  opacity: 0.4;
+  background-color: #8787e1;
+  background:
+    radial-gradient(
+      circle,
+      transparent 20%,
+      #8787e1 20%,
+      #8787e1 80%,
+      transparent 80%,
       transparent
     ),
-    linear-gradient(
-      90deg,
-      transparent 24%,
-      rgba(200, 200, 255, 0.5) 25%,
-      rgba(200, 200, 255, 0.5) 26%,
-      transparent 27%,
-      transparent 74%,
-      rgba(200, 200, 255, 0.5) 75%,
-      rgba(200, 200, 255, 0.5) 76%,
-      transparent 77%,
-      transparent
-    );
-  background-size: 30px 30px;
+    radial-gradient(circle, transparent 20%, #8787e1 20%, #8787e1 80%, transparent 80%, transparent)
+      57.5px 57.5px,
+    linear-gradient(#666895 4.6px, transparent 4.6px) 0 -2.3px,
+    linear-gradient(90deg, #666895 4.6px, #8787e1 4.6px) -2.3px 0;
+  background-size:
+    115px 115px,
+    115px 115px,
+    57.5px 57.5px,
+    57.5px 57.5px;
 
   &::before,
   &::after {
