@@ -1,24 +1,13 @@
 import { useState, useCallback } from 'react';
 import styled from '@emotion/styled';
-import { Global, css } from '@emotion/react';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 import ResourceCounter from './zoo/ResourceCounter';
-import { GameIdContext } from './providers/GameId';
 import getMiningCard from './cards/Mining/getMiningCard';
-import MapArea from './MapArea';
+import MapArea from './zoo/MapArea';
 import Hand from './Hand';
 import Pile from './cards/Pile';
 import { ActionCardInformation } from './cards/types';
-import Scanlines from './cards/Shaders/Scanlines';
-
-const globalStyles = css`
-  html,
-  body {
-    font-family: sans-serif;
-    margin: 0;
-  }
-`;
+import { useParams } from 'react-router-dom';
 
 const PlayArea = styled.div`
   display: grid;
@@ -53,9 +42,11 @@ const PlayArea = styled.div`
   --spotlight-intensity: 0;
 `;
 
-const queryClient = new QueryClient();
-
 const App = () => {
+  const { gameId = 'test' } = useParams<{ gameId: string }>();
+
+  console.log('gameId', gameId);
+
   const [drawPile, setDrawPile] = useState<ActionCardInformation[]>([
     getMiningCard(),
     getMiningCard(),
@@ -84,19 +75,15 @@ const App = () => {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Global styles={globalStyles} />
-      <GameIdContext.Provider value="test">
-        <Scanlines />
-        <MapArea />
-        <PlayArea id="play-area">
-          <Pile draw cards={drawPile} setCards={setDrawPile} facedown />
-          <ResourceCounter />
-          <Hand cards={hand} discard={discard} />
-          <Pile discard cards={discards} setCards={setDiscards} facedown />
-        </PlayArea>
-      </GameIdContext.Provider>
-    </QueryClientProvider>
+    <>
+      <MapArea />
+      <PlayArea id="play-area">
+        <Pile draw cards={drawPile} setCards={setDrawPile} facedown />
+        <ResourceCounter />
+        <Hand cards={hand} discard={discard} />
+        <Pile discard cards={discards} setCards={setDiscards} facedown />
+      </PlayArea>
+    </>
   );
 };
 export default App;
