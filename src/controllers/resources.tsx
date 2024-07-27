@@ -2,7 +2,7 @@ import localforage from 'localforage';
 
 import { ResourceState, ResourceObject } from './types';
 
-const resources = localforage.createInstance({
+export const resources = localforage.createInstance({
   name: 'resources',
 });
 
@@ -46,4 +46,11 @@ export const getAllResources = async (gameId: string): Promise<ResourceObject[]>
       state: r,
     }))
     .filter((s): s is ResourceObject => Boolean(s));
+};
+
+export const deleteGameResources = async (gameId: string): Promise<void> => {
+  const allResources = await resources.keys();
+  const gameResources = allResources.filter((resource) => resource.startsWith(gameId));
+
+  await Promise.all(gameResources.map((resource) => resources.removeItem(resource)));
 };

@@ -7,7 +7,7 @@ import MapArea from './zoo/MapArea';
 import Hand from './Hand';
 import Pile from './cards/Pile';
 import { ActionCardInformation } from './cards/types';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const PlayArea = styled.div`
   display: grid;
@@ -43,6 +43,7 @@ const PlayArea = styled.div`
 `;
 
 const App = () => {
+  const navigate = useNavigate();
   const { gameId = 'test' } = useParams<{ gameId: string }>();
 
   console.log('gameId', gameId);
@@ -76,6 +77,7 @@ const App = () => {
 
   return (
     <>
+      <div onMouseDown={() => navigate('/')}>return to home</div>
       <MapArea />
       <PlayArea id="play-area">
         <Pile draw cards={drawPile} setCards={setDrawPile} facedown />

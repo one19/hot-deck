@@ -10,6 +10,8 @@ const globalStyles = css`
   body {
     font-family: sans-serif;
     margin: 0;
+    background-color: #131211;
+    color: white;
   }
 `;
 

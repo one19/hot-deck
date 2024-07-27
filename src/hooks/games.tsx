@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
   deleteAllGames,
+  deleteGame,
   createGame,
   updateGame,
   getGame,
@@ -45,6 +46,18 @@ export const useDeleteAllGames = () => {
   const { mutate } = useMutation({
     mutationKey: [GAME_ROOT],
     mutationFn: () => deleteAllGames(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [GAME_ROOT] }),
+  });
+
+  return mutate;
+};
+
+export const useDeleteGame = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationKey: [GAME_ROOT],
+    mutationFn: (id: string) => deleteGame(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [GAME_ROOT] }),
   });
 

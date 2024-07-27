@@ -1,9 +1,11 @@
 import localforage from 'localforage';
 import { nanoid } from 'nanoid';
 
+import { deleteGameResources, resources } from './resources';
+
 export const GAME_ROOT = 'games';
 
-const games = localforage.createInstance({
+export const games = localforage.createInstance({
   name: GAME_ROOT,
 });
 
@@ -50,6 +52,12 @@ export const getAllGames = async (): Promise<Game[]> => {
   return items.filter(removeEmpties);
 };
 
+export const deleteGame = async (id: string): Promise<void> => {
+  await games.removeItem(id);
+  await deleteGameResources(id);
+};
+
 export const deleteAllGames = async (): Promise<void> => {
   await games.clear();
+  await resources.clear();
 };
