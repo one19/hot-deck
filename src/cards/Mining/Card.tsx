@@ -10,7 +10,7 @@ import { Title } from '../../zoo/Styled';
 import grainUrl from '../../assets/zoo/grain.webp';
 import ResourceSelector from './ResourceSelector';
 import { Canvas } from '@react-three/fiber';
-// import useWiggle from './useWiggle';
+// import { PaperOverlay } from '../../zoo/PaperOverlay';
 
 import { ActionCardInformation } from '../types';
 import RainbowMultiply from '../Shaders/RainbowMultiply';
@@ -104,7 +104,7 @@ const DEFAULT = {
   y: 0,
 };
 
-const PlayingCard = ({
+const MiningCard = ({
   orientation,
   resources,
   disabled,
@@ -275,4 +275,4 @@ const PlayingCard = ({
   );
 };
 
-export default PlayingCard;
+export default MiningCard;
