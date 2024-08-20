@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCreateGame, useDeleteGame, useDeleteAllGames } from './hooks/games';
 
 import styled from '@emotion/styled';
+import getMiningCard from './cards/Mining/getMiningCard';
 
 const GameItem = styled.div`
   display: flex;
@@ -34,7 +35,15 @@ const MenuPage = () => {
           </GameItem>
         ))}
 
-        <div onMouseDown={() => createGame({ name: `new fake game ${games.length + 1}` })}>
+        <div
+          onMouseDown={() => {
+            console.log('creating game');
+            createGame({
+              name: `new fake game ${games.length + 1}`,
+              drawPile: Array.from({ length: 10 }, getMiningCard),
+            });
+          }}
+        >
           Create new game
         </div>
         <div onMouseDown={() => deleteAllGames()}> delete all games</div>

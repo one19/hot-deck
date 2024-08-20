@@ -18,8 +18,8 @@ export type ActionCardInformation = {
   facedown?: boolean;
   disabled?: boolean;
   className?: string;
-  discard: () => void;
   isFocused?: boolean;
+  discard?: () => void;
   resources: { name: string; image: string }[];
   orientation?: Partial<Orientation>;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;

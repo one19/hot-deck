@@ -34,6 +34,7 @@ export const useCreateGame = () => {
   const { mutate } = useMutation({
     mutationKey: [GAME_ROOT],
     mutationFn: (value: Partial<Game>) => createGame(value),
+    onError: (error) => console.error('error creating game', error),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [GAME_ROOT] }),
   });
 

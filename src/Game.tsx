@@ -1,13 +1,13 @@
-import { useState, useCallback } from 'react';
 import styled from '@emotion/styled';
+import { nanoid } from 'nanoid';
 
 import ResourceCounter from './zoo/ResourceCounter';
-import getMiningCard from './cards/Mining/getMiningCard';
 import MapArea from './zoo/MapArea';
 import Hand from './Hand';
 import Pile from './cards/Pile';
-import { ActionCardInformation } from './cards/types';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import DrawX from './cards/Actions/DrawX';
+import { useGame } from './hooks/games';
 
 const PlayArea = styled.div`
   display: grid;
@@ -44,46 +44,34 @@ const PlayArea = styled.div`
 
 const App = () => {
   const navigate = useNavigate();
-  const { gameId = 'test' } = useParams<{ gameId: string }>();
+  const [{ isLoading, data: game }, setGame] = useGame();
 
-  console.log('gameId', gameId);
+  if (isLoading || !game) return <div>Loading...</div>;
 
-  const [drawPile, setDrawPile] = useState<ActionCardInformation[]>([
-    getMiningCard(),
-    getMiningCard(),
-    getMiningCard(),
-    getMiningCard(),
-    getMiningCard(),
-  ]);
-  const [hand, setHand] = useState<ActionCardInformation[]>([
-    getMiningCard(),
-    getMiningCard(),
-    getMiningCard(),
-    getMiningCard(),
-    getMiningCard(),
-  ]);
-  const [discards, setDiscards] = useState<ActionCardInformation[]>([]);
+  const { hand = [], drawPile = [], discardPile = [] } = game;
 
-  const discard = useCallback(
-    (id: string) => {
-      const card = hand.find((c) => c.id === id);
-      if (!card) throw new Error('Discarded card not found');
+  // might be best to inline this logic in the card itself
+  // especially now that we've decoupled state from this wrapper
+  const discard = (id: string) => {
+    const card = hand.find((c) => c.id === id);
+    if (!card) throw new Error('Discarded card not found');
 
-      setHand((hand) => hand.filter((c) => c.id !== id));
-      setDiscards((discards) => [...discards, card]);
-    },
-    [hand, setHand, setDiscards]
-  );
+    setGame({
+      hand: hand.filter((c) => c.id !== id),
+      discards: [...discardPile, card],
+    });
+  };
 
   return (
     <>
       <div onMouseDown={() => navigate('/')}>return to home</div>
       <MapArea />
       <PlayArea id="play-area">
-        <Pile draw cards={drawPile} setCards={setDrawPile} facedown />
+        <DrawX drawCount={5} cost={3} id={nanoid()} />
+        <Pile draw cards={drawPile} facedown />
         <ResourceCounter />
-        <Hand cards={hand} discard={discard} />
-        <Pile discard cards={discards} setCards={setDiscards} facedown />
+        <Hand cards={hand ?? []} discard={discard} />
+        <Pile discard cards={discardPile ?? []} facedown />
       </PlayArea>
     </>
   );

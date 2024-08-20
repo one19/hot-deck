@@ -61,7 +61,6 @@ type Props = {
   facedown?: boolean;
   cardFactory?: typeof miningCard;
   cards?: ActionCardInformation[];
-  setCards: (cards: ActionCardInformation[]) => void;
 };
 const Pile = ({ draw, discard, infinite, facedown, cardFactory, cards }: Props) => {
   // when in the tech tree
@@ -70,7 +69,7 @@ const Pile = ({ draw, discard, infinite, facedown, cardFactory, cards }: Props) 
       <Wrapper>
         {Array.from({ length: 4 }, (_, i) => i).map((index) => {
           const card = cardFactory({ facedown });
-          return <Card key={card.id} {...card} disabled={index !== 0} />;
+          return <Card key={card.id} {...card} discard={() => {}} disabled={index !== 0} />;
         })}
         <InfinityBox className="card" />
       </Wrapper>

@@ -21,7 +21,6 @@ const getMiningCard = ({ facedown }: MiningCardProps = {}) => {
     facedown,
     id: nanoid(),
     title: 'Mining',
-    discard: () => {},
     variant: 'rawResources',
     shiny: Math.random() > 0.75,
     text: 'Gain 1 resource',
