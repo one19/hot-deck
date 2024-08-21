@@ -179,7 +179,7 @@ const MiningCard = ({
           const DURATION = 250;
           mutate({ [hoveredResourceRef.current]: 1 });
           api.start({ x: 0, y: 0, scale: 0, rotateZ: 6000, config: { duration: DURATION } });
-          setTimeout(() => discard(), DURATION);
+          setTimeout(() => discard && discard(), DURATION);
         } else {
           // return to initial on end of dragging phase
           setDragging(false);
@@ -209,7 +209,6 @@ const MiningCard = ({
       },
       onMove: ({ dragging, hovering, first, last, xy: [px, py] }) => {
         // start by setting the card dims in a non-rerendering way
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         if (first && cardRef.current) {
           dimStore.current = cardRef.current.getBoundingClientRect();
           cardRef.current.style.setProperty('--spotlight-intensity', '0.2');
