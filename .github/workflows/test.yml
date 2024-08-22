@@ -1,6 +1,9 @@
 name: Auto merge basic check
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
@@ -24,10 +27,8 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
-        continue-on-error: false # Fail on lint errors
 
       - name: Run Build
         run: npm run build
-        continue-on-error: false # Fail on build errors
       
       # run tests once we've solidified the app more
