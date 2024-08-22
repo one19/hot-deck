@@ -137,7 +137,7 @@ const DrawX = ({ drawCount, shiny, cost }: ActionEconomyCardInformation) => {
 
       // called on first hover enter, and on exiting hovering
       onHover: ({ active, last }) => {
-        api.start({
+        void api.start({
           scale: active ? 1.1 : 1,
           rotateX: 0,
           rotateY: 0,
@@ -158,7 +158,7 @@ const DrawX = ({ drawCount, shiny, cost }: ActionEconomyCardInformation) => {
 
         if (hovering) {
           if (!cardRef.current) return;
-          api.start({
+          void api.start({
             rotateX: rotX(py),
             rotateY: rotY(px),
           });

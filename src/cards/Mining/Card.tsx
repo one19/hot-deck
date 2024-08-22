@@ -166,7 +166,7 @@ const MiningCard = ({
           }
 
           // Apply the initial offset to keep the card centered on the cursor
-          api.start({
+          void api.start({
             x: mx + initialOffset.current.x,
             y: my + initialOffset.current.y,
             scale: 0.3,
@@ -178,14 +178,14 @@ const MiningCard = ({
         } else if (hoveredResourceRef.current) {
           const DURATION = 250;
           mutate({ [hoveredResourceRef.current]: 1 });
-          api.start({ x: 0, y: 0, scale: 0, rotateZ: 6000, config: { duration: DURATION } });
+          void api.start({ x: 0, y: 0, scale: 0, rotateZ: 6000, config: { duration: DURATION } });
           setTimeout(() => discard && discard(), DURATION);
         } else {
           // return to initial on end of dragging phase
           setDragging(false);
           initialOffset.current = { x: 0, y: 0 };
           setRenderSelection(false);
-          api.start({
+          void api.start({
             x: 0,
             y: 0,
             scale: isHovering ? 1.1 : 1,
@@ -197,7 +197,7 @@ const MiningCard = ({
       onHover: ({ dragging, active, last }) => {
         setHovering(true);
         if (!dragging) {
-          api.start({
+          void api.start({
             scale: active ? 1.1 : 1,
             rotateX: 0,
             rotateY: facedown ? 180 : 0,
@@ -216,13 +216,13 @@ const MiningCard = ({
 
         if (last && !dragging && hovering && !isHovering) {
           // final call on end of dragging phase
-          api.start({ scale: 1 });
+          void api.start({ scale: 1 });
           cardRef?.current?.style.setProperty('--spotlight-intensity', '0');
         }
 
         if (!dragging && hovering && isHovering) {
           if (!cardRef.current) return;
-          api.start({
+          void api.start({
             rotateX: rotX(py),
             rotateY: rotY(px) + (facedown ? 180 : 0),
           });

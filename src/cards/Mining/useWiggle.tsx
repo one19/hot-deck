@@ -17,7 +17,7 @@ const useWiggle = (
     const initialTarget = initialOrientation + initialDelta;
 
     // Start the first animation towards this random target
-    api.start({
+    void api.start({
       rotateZ: initialTarget,
       config,
     });
@@ -33,7 +33,7 @@ const useWiggle = (
         initialOrientation + (isMovingToMax ? maxRotationDegree : -maxRotationDegree);
 
       const interval = setInterval(() => {
-        api.start({
+        void api.start({
           rotateZ: nextTarget(),
           config,
         });
