@@ -1,108 +1,12 @@
 import { createPortal } from 'react-dom';
 import { useRef, useState } from 'react';
-import styled from '@emotion/styled';
-import { useSpring, a, config } from '@react-spring/web';
+import { useSpring, config } from '@react-spring/web';
 import { useGesture } from '@use-gesture/react';
-import { getBackground } from '../variants';
-import ImageFan from '../ImageFan';
 import { useSetResources } from '../../hooks/resources';
-import { Title } from '../../zoo/Styled';
-import grainUrl from '../../assets/zoo/grain.webp';
 import ResourceSelector from './ResourceSelector';
-import { Canvas } from '@react-three/fiber';
-// import { PaperOverlay } from '../../zoo/PaperOverlay';
+import Card from '../Card';
 
-import { ActionCardInformation } from '../types';
-import RainbowMultiply from '../Shaders/RainbowMultiply';
-
-const StyledCanvas = styled(Canvas)`
-  border-radius: var(--card-border-radius);
-  top: 0;
-  left: 0;
-`;
-
-const GrainOverlay = styled.div`
-  position: absolute;
-  inset: 0;
-  background-image: url('${grainUrl}');
-  background-size: var(--card-width) 100%;
-  pointer-events: none;
-  mix-blend-mode: plus-lighter;
-  border-radius: var(--card-border-radius);
-`;
-
-const SpotlightOverlay = styled(a.div)`
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at var(--spotlight-x) var(--spotlight-y),
-    rgba(255, 255, 255, var(--spotlight-intensity)),
-    transparent
-  );
-  pointer-events: none;
-  border-radius: var(--card-border-radius);
-`;
-
-const Wrapper = styled(a.div)`
-  width: var(--card-width);
-  height: var(--card-height);
-  box-sizing: border-box;
-  position: relative;
-  touch-action: none;
-  will-change: transform, opacity;
-  border-radius: var(--card-border-radius);
-  z-index: var(--z-index-cards);
-  perspective: 800px;
-
-  &:hover {
-    z-index: calc(var(--z-index-cards) + 1);
-  }
-
-  &[data-grabbed='true'] {
-    z-index: calc(var(--z-index-cards) + 2);
-  }
-`;
-
-const Card = styled(a.div)<{ variant?: string }>`
-  box-sizing: border-box;
-  border-radius: var(--card-border-radius);
-  padding: 10px;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  ${getBackground};
-`;
-const CardBack = styled(Card)`
-  background: linear-gradient(to bottom, #fed, #bed);
-  border: 15px solid palegoldenrod;
-`;
-
-const Cost = styled.div`
-  font-size: 2em;
-  margin-right: 0.25em;
-  font-weight: bold;
-  user-select: none;
-`;
-
-const Text = styled.p`
-  font-size: 0.9em;
-  user-select: none;
-`;
-
-const CardHeader = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const DEFAULT = {
-  rotateX: 0,
-  rotateY: 0,
-  rotateZ: 0,
-  scale: 1,
-  zoom: 0,
-  x: 0,
-  y: 0,
-};
+import { ActionCardInformation, DEFAULT_ORIENTATION } from '../types';
 
 const MiningCard = ({
   orientation,
@@ -129,17 +33,15 @@ const MiningCard = ({
 
   const [props, api] = useSpring(
     () => ({
-      ...DEFAULT,
+      ...DEFAULT_ORIENTATION,
       ...orientation,
-      rotateZ: (orientation?.rotateZ ?? DEFAULT.rotateZ) * (facedown ? -1 : 1),
+      rotateZ: (orientation?.rotateZ ?? DEFAULT_ORIENTATION.rotateZ) * (facedown ? -1 : 1),
       opacity: facedown ? 0 : 1,
       rotateY: facedown ? 180 : 0,
       config: config.stiff,
     }),
     [orientation]
   );
-
-  // useWiggle(api, props.rotateZ.get());
 
   const rotX = (py: number) =>
     (py - props.y.get() - dimStore.current.y - dimStore.current.height / 2) / 5;
@@ -240,29 +142,17 @@ const MiningCard = ({
 
   return (
     <>
-      <Wrapper
-        ref={cardRef}
-        className="card"
-        data-grabbed={`${isDragging}`}
-        {...(!disabled && bind())}
-      >
-        <CardBack style={{ ...props, opacity: props.opacity.to((o) => 1 - o) }} />
-        <Card style={props} variant={variant}>
-          <CardHeader>
-            <Cost>{cost}</Cost>
-            <Title>{title}</Title>
-          </CardHeader>
-          <ImageFan images={resources.map((r) => r.image)} />
-          <Text>{text}</Text>
-          <GrainOverlay />
-          <SpotlightOverlay />
-          {shiny && (
-            <StyledCanvas style={{ position: 'absolute', pointerEvents: 'none' }}>
-              <RainbowMultiply {...props} />
-            </StyledCanvas>
-          )}
-        </Card>
-      </Wrapper>
+      <Card
+        bind={!disabled ? bind : undefined}
+        cardRef={cardRef}
+        springProps={props}
+        title={title}
+        variant={variant}
+        shiny={shiny}
+        cost={cost}
+        text={text}
+        data-grabbed={isDragging}
+      />
       {playArea &&
         renderSelection &&
         !facedown &&

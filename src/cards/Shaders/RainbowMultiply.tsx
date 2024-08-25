@@ -59,9 +59,9 @@ declare module '@react-three/fiber' {
 }
 
 type Props = {
-  rotateX: SpringValue<number>;
-  rotateY: SpringValue<number>;
-  rotateZ: SpringValue<number>;
+  rotateX?: SpringValue<number>;
+  rotateY?: SpringValue<number>;
+  rotateZ?: SpringValue<number>;
 };
 
 // Step 2: Create the component and pass animated props
@@ -71,9 +71,9 @@ const RainbowEffect = ({ rotateX, rotateY, rotateZ }: Props) => {
   useFrame(() => {
     if (!shaderRef.current) return;
     // shaderRef.current.uniforms.time.value = clock.getElapsedTime();
-    shaderRef.current.uniforms.rotateX.value = rotateX.get();
-    shaderRef.current.uniforms.rotateY.value = rotateY.get();
-    shaderRef.current.uniforms.rotateZ.value = rotateZ.get();
+    shaderRef.current.uniforms.rotateX.value = rotateX?.get();
+    shaderRef.current.uniforms.rotateY.value = rotateY?.get();
+    shaderRef.current.uniforms.rotateZ.value = rotateZ?.get();
   });
 
   return (
