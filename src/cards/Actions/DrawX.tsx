@@ -12,7 +12,7 @@ type ActionEconomyCardInformation = {
   id: string;
 };
 
-const DrawX = ({ drawCount, shiny, cost }: ActionEconomyCardInformation) => {
+const DrawX = ({ drawCount, shiny, cost, id }: ActionEconomyCardInformation) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const [props, api] = useSpring(
@@ -35,6 +35,7 @@ const DrawX = ({ drawCount, shiny, cost }: ActionEconomyCardInformation) => {
       cost={cost}
       shiny={shiny}
       variant="actionBackground"
+      id={id}
     />
   );
 };

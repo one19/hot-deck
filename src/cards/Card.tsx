@@ -1,14 +1,16 @@
 import styled from '@emotion/styled';
 import { a } from '@react-spring/web';
-import { getBackground } from './variants';
+import { Canvas } from '@react-three/fiber';
+import { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/types';
+
 import { Title } from '../zoo/Styled';
 import grainUrl from '../assets/zoo/grain.webp';
 import placeholderUrl from '../assets/factories/mine.png';
-import { Canvas } from '@react-three/fiber';
 
 import RainbowMultiply from './Shaders/RainbowMultiply';
+import { getBackground } from './variants';
 import { SpringProps } from './types';
-import { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/types';
+import ImageFan from './ImageFan';
 
 const StyledCanvas = styled(Canvas)`
   border-radius: var(--card-border-radius);
@@ -101,10 +103,11 @@ type CardInfo = {
   shiny?: boolean;
   title: string;
   cost: number;
-  image?: string;
+  images?: string[];
   text: string;
   variant?: string;
   facedown?: boolean;
+  id: string;
 
   // props for when we want to override the simple hover
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,25 +117,29 @@ type CardInfo = {
 };
 
 const Card = ({
-  facedown,
+  id,
   title,
   shiny,
   cost,
-  image,
+  images = [placeholderUrl],
   variant,
   text,
   bind,
   cardRef,
   springProps,
 }: CardInfo) => (
-  <Wrapper ref={cardRef} className="card" {...(bind && bind())}>
+  <Wrapper id={id} ref={cardRef} className="card" {...(bind && bind())}>
     <CardBack style={{ ...springProps, opacity: springProps.opacity.to((o) => 1 - o) }} />
     <CardBody style={springProps} variant={variant}>
       <CardHeader>
         <Cost>{cost}</Cost>
         <Title>{title}</Title>
       </CardHeader>
-      <Image src={image ?? placeholderUrl} />
+      {images.length === 1 ? (
+        <Image src={images[0]} />
+      ) : (
+        <ImageFan images={images.map((imageUrl) => imageUrl)} />
+      )}
       <Text>{text}</Text>
       <GrainOverlay />
       <SpotlightOverlay />

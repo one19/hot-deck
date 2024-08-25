@@ -19,6 +19,7 @@ const MiningCard = ({
   title,
   text,
   cost,
+  id,
 }: ActionCardInformation) => {
   const [isHovering, setHovering] = useState(false);
   const [isDragging, setDragging] = useState(false);
@@ -151,7 +152,9 @@ const MiningCard = ({
         shiny={shiny}
         cost={cost}
         text={text}
+        images={resources.map((r) => r.image)}
         data-grabbed={isDragging}
+        id={id}
       />
       {playArea &&
         renderSelection &&
