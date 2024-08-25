@@ -37,7 +37,6 @@ const MenuPage = () => {
 
         <div
           onMouseDown={() => {
-            console.log('creating game');
             createGame({
               name: `new fake game ${games.length + 1}`,
               drawPile: Array.from({ length: 10 }, getMiningCard),

@@ -32,9 +32,7 @@ export const createGame = async (game: Partial<Game>): Promise<Game> => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
-  console.log('newgggg', newGame);
-  const resultio = await games.setItem<Game>(id, newGame);
-  console.log(resultio);
+  await games.setItem<Game>(id, newGame);
   return newGame;
 };
 
