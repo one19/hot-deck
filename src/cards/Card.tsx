@@ -11,12 +11,23 @@ import RainbowMultiply from './Shaders/RainbowMultiply';
 import { getBackground } from './variants';
 import { SpringProps } from './types';
 import ImageFan from './ImageFan';
-// import { BorderBeam } from '../zoo/BorderBeam';
+import GlowingWormBorder from './Shaders/GlowWorm';
 
 const StyledCanvas = styled(Canvas)`
-  border-radius: var(--card-border-radius);
+  position: absolute !important;
+  pointer-events: none;
   top: 0;
   left: 0;
+
+  & canvas {
+    border-radius: var(--card-border-radius);
+    box-sizing: border-box;
+    width: 100% !important;
+    height: 100% !important;
+    border: 1px solid pink;
+    postion: absolute;
+    pointer-events: none;
+  }
 `;
 
 const GrainOverlay = styled.div`
@@ -133,8 +144,6 @@ const Card = ({
   <Wrapper id={id} ref={cardRef} className="card" {...(bind && bind())}>
     <CardBack style={{ ...springProps, opacity: springProps.opacity.to((o) => 1 - o) }} />
     <CardBody style={springProps} variant={variant}>
-      {/* HOLY POOP. We must write this with webgl because this causes a 36x increase in gpu use */}
-      {/* {variant === 'action' && <BorderBeam />} */}
       <CardHeader>
         <Cost>{cost}</Cost>
         <Title>{title}</Title>
@@ -147,9 +156,10 @@ const Card = ({
       <Text>{text}</Text>
       <GrainOverlay />
       <SpotlightOverlay />
-      {shiny && (
-        <StyledCanvas style={{ position: 'absolute', pointerEvents: 'none' }}>
-          <RainbowMultiply {...springProps} />
+      {(shiny || variant === 'action') && (
+        <StyledCanvas>
+          {shiny && <RainbowMultiply {...springProps} />}
+          {variant === 'action' && <GlowingWormBorder />}
         </StyledCanvas>
       )}
     </CardBody>
