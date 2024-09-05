@@ -41,6 +41,7 @@ const MenuPage = () => {
             createGame({
               name: `new fake game ${games.length + 1}`,
               drawPile: Array.from({ length: 10 }, getMiningCard),
+              actionCardPile: [{ drawCount: 5, cost: 3, id: nanoid() }],
             });
           }}
         >

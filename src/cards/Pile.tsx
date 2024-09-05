@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import miningCard from './Mining/getMiningCard';
 import Card from './Mining/Card';
 
-import { ActionCardInformation } from './types';
+import { GeneralCardInformation } from './types';
 
 const Wrapper = styled.div<{ draw?: boolean; discard?: boolean }>`
   --card-overlap: 5px;
@@ -60,7 +60,7 @@ type Props = {
   infinite?: boolean;
   facedown?: boolean;
   cardFactory?: typeof miningCard;
-  cards?: ActionCardInformation[];
+  cards?: GeneralCardInformation[];
 };
 const Pile = ({ draw, discard, infinite, facedown, cardFactory, cards }: Props) => {
   // when in the tech tree

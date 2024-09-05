@@ -2,7 +2,8 @@ import localforage from 'localforage';
 import { nanoid } from 'nanoid';
 
 import { deleteGameResources, resources } from './resources';
-import { ActionCardInformation } from '../cards/types';
+import { GeneralCardInformation } from '../cards/types';
+import { ActionEconomyCardInformation } from '../cards/Actions/DrawX';
 
 export const GAME_ROOT = 'games';
 
@@ -15,11 +16,11 @@ export type Game = {
   createdAt: string;
   updatedAt: string;
   name?: string;
-  drawPile: ActionCardInformation[];
-  hand: ActionCardInformation[];
-  discardPile: ActionCardInformation[];
+  drawPile: GeneralCardInformation[];
+  hand: GeneralCardInformation[];
+  discardPile: GeneralCardInformation[];
 
-  actionCardPile: ActionCardInformation[];
+  actionCardPile: ActionEconomyCardInformation[];
   actionCardIndex: number;
   actionCardActivations: number | null;
 

@@ -6,7 +6,7 @@ import { useSetResources } from '../../hooks/resources';
 import ResourceSelector from './ResourceSelector';
 import Card from '../Card';
 
-import { ActionCardInformation, DEFAULT_ORIENTATION } from '../types';
+import { GeneralCardInformation, DEFAULT_ORIENTATION } from '../types';
 import { useDiscard } from '../../hooks/games';
 
 const MiningCard = ({
@@ -20,7 +20,7 @@ const MiningCard = ({
   text,
   cost,
   id,
-}: ActionCardInformation) => {
+}: GeneralCardInformation) => {
   const [isHovering, setHovering] = useState(false);
   const [isDragging, setDragging] = useState(false);
   const [renderSelection, setRenderSelection] = useState(false);

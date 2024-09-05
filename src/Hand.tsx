@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Card from './cards/Mining/Card';
-import { ActionCardInformation } from './cards/types';
+import { GeneralCardInformation } from './cards/types';
 
 const ROTATION_ANGLE = 2.5;
 const REDUCED_ROTATION_ANGLE = 1.5;
@@ -23,7 +23,7 @@ const PositionalWrapper = styled.div<{ isLargeHand: boolean; index: number; tota
 `;
 
 type HandProps = {
-  cards: ActionCardInformation[];
+  cards: GeneralCardInformation[];
 };
 
 const Hand = ({ cards }: HandProps) => {

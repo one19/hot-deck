@@ -6,7 +6,7 @@ import useHover from '../useHover';
 import { DEFAULT_ORIENTATION } from '../types';
 import { useGame } from '../../hooks/games';
 
-type ActionEconomyCardInformation = {
+export type ActionEconomyCardInformation = {
   drawCount: number;
   shiny?: boolean;
   cost: number;

@@ -19,7 +19,7 @@ export type SpringProps = MappedSpringProps<typeof DEFAULT_ORIENTATION>;
 
 export type Orientation = typeof DEFAULT_ORIENTATION;
 
-export type ActionCardInformation = {
+export type GeneralCardInformation = {
   id: string;
   cost: number;
   text: string; // to be changed to something dynamically interpretable later
