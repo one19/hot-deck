@@ -7,13 +7,13 @@ import ResourceSelector from './ResourceSelector';
 import Card from '../Card';
 
 import { ActionCardInformation, DEFAULT_ORIENTATION } from '../types';
+import { useDiscard } from '../../hooks/games';
 
 const MiningCard = ({
   orientation,
   resources,
   disabled,
   facedown,
-  discard,
   variant,
   shiny,
   title,
@@ -29,6 +29,7 @@ const MiningCard = ({
   const initialOffset = useRef({ x: 0, y: 0 });
   const hoveredResourceRef = useRef<string | null>(null);
   const { mutate } = useSetResources('rawResources');
+  const discard = useDiscard();
 
   const playArea = document.getElementById('play-area');
 
@@ -81,8 +82,9 @@ const MiningCard = ({
         } else if (hoveredResourceRef.current) {
           const DURATION = 250;
           mutate({ [hoveredResourceRef.current]: 1 });
+          // TODO: replace this with stars and sparkles
           void api.start({ x: 0, y: 0, scale: 0, rotateZ: 6000, config: { duration: DURATION } });
-          setTimeout(() => discard && discard(), DURATION);
+          setTimeout(() => discard(id), DURATION);
         } else {
           // return to initial on end of dragging phase
           setDragging(false);

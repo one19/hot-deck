@@ -15,18 +15,32 @@ export type Game = {
   createdAt: string;
   updatedAt: string;
   name?: string;
-  drawPile?: ActionCardInformation[];
-  hand?: ActionCardInformation[];
-  discardPile?: ActionCardInformation[];
+  drawPile: ActionCardInformation[];
+  hand: ActionCardInformation[];
+  discardPile: ActionCardInformation[];
+
+  actionCardPile: ActionCardInformation[];
+  actionCardIndex: number;
+  actionCardActivations: number | null;
 
   // TODO: remove once we shake out the state flow
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [index: string]: any;
 };
 
+const EMPTY_GAME_STATE = {
+  actionCardPile: [],
+  discardPile: [],
+  drawPile: [],
+  hand: [],
+  actionCardIndex: 0,
+  actionCardActivations: null,
+};
+
 export const createGame = async (game: Partial<Game>): Promise<Game> => {
   const id = nanoid();
   const newGame = {
+    ...EMPTY_GAME_STATE,
     ...game,
     id,
     createdAt: new Date().toISOString(),

@@ -31,8 +31,6 @@ export type ActionCardInformation = {
   disabled?: boolean;
   className?: string;
   isFocused?: boolean;
-  discard?: () => void;
   resources: { name: string; image: string }[];
   orientation?: Partial<Orientation>;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 };

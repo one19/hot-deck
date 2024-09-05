@@ -5,6 +5,7 @@ import { useCreateGame, useDeleteGame, useDeleteAllGames } from './hooks/games';
 
 import styled from '@emotion/styled';
 import getMiningCard from './cards/Mining/getMiningCard';
+import { nanoid } from 'nanoid';
 
 const GameItem = styled.div`
   display: flex;

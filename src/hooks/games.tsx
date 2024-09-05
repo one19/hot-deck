@@ -10,6 +10,7 @@ import {
   GAME_ROOT,
 } from '../controllers/games';
 import { useParams } from 'react-router-dom';
+import { useCallback } from 'react';
 
 export const useGame = () => {
   const queryClient = useQueryClient();
@@ -26,6 +27,25 @@ export const useGame = () => {
   });
 
   return [query, mutate] as const;
+};
+
+export const useDiscard = () => {
+  const [{ data: game }, setGame] = useGame();
+
+  return useCallback(
+    (cardId: string) => {
+      if (!game) return;
+
+      const card = game.hand.find((c) => c.id === cardId);
+      if (!card) throw new Error("couldn't find card to destroy");
+
+      const remainingHand = game.hand?.filter((c) => c.id !== cardId);
+      const updatedDiscard = [...game.discardPile, card];
+
+      setGame({ hand: remainingHand, discardPile: updatedDiscard });
+    },
+    [game, setGame]
+  );
 };
 
 export const useCreateGame = () => {
