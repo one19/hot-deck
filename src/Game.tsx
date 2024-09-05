@@ -44,23 +44,11 @@ const PlayArea = styled.div`
 
 const App = () => {
   const navigate = useNavigate();
-  const [{ isLoading, data: game }, setGame] = useGame();
+  const [{ isLoading, data: game }, _setGame] = useGame();
 
   if (isLoading || !game) return <div>Loading...</div>;
 
   const { hand = [], drawPile = [], discardPile = [] } = game;
-
-  // might be best to inline this logic in the card itself
-  // especially now that we've decoupled state from this wrapper
-  const discard = (id: string) => {
-    const card = hand.find((c) => c.id === id);
-    if (!card) throw new Error('Discarded card not found');
-
-    setGame({
-      hand: hand.filter((c) => c.id !== id),
-      discards: [...discardPile, card],
-    });
-  };
 
   return (
     <>
@@ -70,7 +58,7 @@ const App = () => {
         <DrawX drawCount={5} cost={3} id={nanoid()} />
         <Pile draw cards={drawPile} facedown />
         <ResourceCounter />
-        <Hand cards={hand ?? []} discard={discard} />
+        <Hand cards={hand ?? []} />
         <Pile discard cards={discardPile ?? []} facedown />
       </PlayArea>
     </>
