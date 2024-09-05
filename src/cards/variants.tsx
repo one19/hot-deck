@@ -92,7 +92,7 @@ const buildings = `
     7px 12px;
 `;
 
-const actionBackground = `
+const action = `
   background-color: #32CD32; /* Lime green base */
   background-image: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.2) 25%, rgba(255,255,255,0.2) 50%, transparent 50%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2)),
                     linear-gradient(45deg, transparent 25%, rgba(0,0,0,0.2) 25%, rgba(0,0,0,0.2) 50%, transparent 50%, transparent 75%, rgba(0,0,0,0.2) 75%, rgba(0,0,0,0.2));
@@ -118,4 +118,4 @@ const actionBackground = `
 
 type Props = { variant?: string };
 export const getBackground = ({ variant = '' }: Props) =>
-  ({ rawResources, money, buildings, actionBackground })[variant] || failureBackground;
+  ({ rawResources, money, buildings, action })[variant] || failureBackground;
