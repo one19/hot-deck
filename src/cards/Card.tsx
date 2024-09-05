@@ -11,7 +11,7 @@ import RainbowMultiply from './Shaders/RainbowMultiply';
 import { getBackground } from './variants';
 import { SpringProps } from './types';
 import ImageFan from './ImageFan';
-import { BorderBeam } from '../zoo/BorderBeam';
+// import { BorderBeam } from '../zoo/BorderBeam';
 
 const StyledCanvas = styled(Canvas)`
   border-radius: var(--card-border-radius);
@@ -133,7 +133,8 @@ const Card = ({
   <Wrapper id={id} ref={cardRef} className="card" {...(bind && bind())}>
     <CardBack style={{ ...springProps, opacity: springProps.opacity.to((o) => 1 - o) }} />
     <CardBody style={springProps} variant={variant}>
-      {variant === 'action' && <BorderBeam />}
+      {/* HOLY POOP. We must write this with webgl because this causes a 36x increase in gpu use */}
+      {/* {variant === 'action' && <BorderBeam />} */}
       <CardHeader>
         <Cost>{cost}</Cost>
         <Title>{title}</Title>
