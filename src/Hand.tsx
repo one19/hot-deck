@@ -3,44 +3,52 @@ import Card from './cards/Mining/Card';
 import { ActionCardInformation } from './cards/types';
 
 const ROTATION_ANGLE = 2.5;
+const REDUCED_ROTATION_ANGLE = 1.5;
 
-const HandContainer = styled.div`
+const HandContainer = styled.div<{ isLargeHand: boolean }>`
   grid-area: hand;
-  display: inline-flex;
+  display: ${({ isLargeHand }) => (isLargeHand ? 'block' : 'inline-flex')};
   justify-content: center;
+  position: ${({ isLargeHand }) => (isLargeHand ? 'relative' : 'static')};
+`;
 
-  .card {
-    transition: transform 0.3s ease;
-    transform-origin: bottom center;
-  }
-
-  .card:focus {
-    transform: scale(1.5) translateY(-50px);
-    box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.3);
-    z-index: 10;
-  }
+const PositionalWrapper = styled.div<{ isLargeHand: boolean; index: number; totalCards: number }>`
+  ${({ isLargeHand, index, totalCards }) =>
+    isLargeHand &&
+    `
+    position: absolute;
+    left: calc(${index} * (100% / ${totalCards}) - ${50 / totalCards}%);
+    top: ${Math.abs(index - totalCards / 2) * 2}px;
+  `}
 `;
 
 type HandProps = {
   cards: ActionCardInformation[];
-  discard: (id: string) => void;
 };
 
-const Hand = ({ cards, discard }: HandProps) => (
-  <HandContainer>
-    {cards.map((card, index) => {
-      const offCenter = index + 0.5 - cards.length / 2;
+const Hand = ({ cards }: HandProps) => {
+  const isLargeHand = cards.length > 5;
 
-      return (
-        <Card
-          key={card.id}
-          {...card}
-          discard={() => discard(card.id)}
-          orientation={{ rotateZ: ROTATION_ANGLE * offCenter }}
-        />
-      );
-    })}
-  </HandContainer>
-);
+  return (
+    <HandContainer isLargeHand={isLargeHand}>
+      {cards.map((card, index) => {
+        const offCenter = index + 0.5 - cards.length / 2;
+        const rotationAngle = isLargeHand ? REDUCED_ROTATION_ANGLE : ROTATION_ANGLE;
+        const positionStyles = isLargeHand ? { rotateZ: rotationAngle * offCenter } : {};
+
+        return (
+          <PositionalWrapper
+            key={card.id}
+            isLargeHand={isLargeHand}
+            index={index}
+            totalCards={cards.length}
+          >
+            <Card {...card} orientation={positionStyles} />
+          </PositionalWrapper>
+        );
+      })}
+    </HandContainer>
+  );
+};
 
 export default Hand;

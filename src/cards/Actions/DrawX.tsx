@@ -55,7 +55,7 @@ const DrawX = ({ drawCount, shiny, cost, id }: ActionEconomyCardInformation) => 
       text={`Draw ${drawCount} cards from your draw pile`}
       cost={cost}
       shiny={shiny}
-      variant="actionBackground"
+      variant="action"
       id={id}
     />
   );

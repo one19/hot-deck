@@ -42,6 +42,7 @@ const SpotlightOverlay = styled(a.div)`
 
 const Wrapper = styled(a.div)`
   width: var(--card-width);
+  min-width: var(--card-width);
   height: var(--card-height);
   box-sizing: border-box;
   position: relative;
