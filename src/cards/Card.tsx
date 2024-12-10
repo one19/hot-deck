@@ -1,17 +1,38 @@
+import { useMemo } from 'react';
 import styled from '@emotion/styled';
 import { a } from '@react-spring/web';
+import { keyframes } from '@emotion/css';
 import { Canvas } from '@react-three/fiber';
 import { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/types';
 
-import { Title } from '../zoo/Styled';
-import grainUrl from '../assets/zoo/grain.webp';
 import placeholderUrl from '../assets/factories/mine.png';
+import grainUrl from '../assets/zoo/grain.webp';
+import { Title } from '../zoo/Styled';
 
+import { BorderBeam } from './Shaders/unused-test-components/BorderBeam';
 import RainbowMultiply from './Shaders/RainbowMultiply';
+import GlowingWormBorder from './Shaders/GlowWorm';
 import { getBackground } from './variants';
 import { SpringProps } from './types';
 import ImageFan from './ImageFan';
-import GlowingWormBorder from './Shaders/GlowWorm';
+
+const wiggle = keyframes`
+  from {
+    transform: translate(-10px, 0) rotate(-5deg);
+  }
+  25% {
+    transform: translate(0, -10px) rotate(5deg);
+  }
+  50% {
+    transform: translate(10px, 0) rotate(-5deg);
+  }
+  75% {
+    transform: translate(0, 10px) rotate(5deg);
+  }
+  to {
+    transform: translate(-10px, 0) rotate(-5deg);
+  }
+`;
 
 const StyledCanvas = styled(Canvas)`
   position: absolute !important;
@@ -52,7 +73,7 @@ const SpotlightOverlay = styled(a.div)`
   border-radius: var(--card-border-radius);
 `;
 
-const Wrapper = styled(a.div)`
+const Wrapper = styled(a.div)<{ randomDelay: string }>`
   width: var(--card-width);
   min-width: var(--card-width);
   height: var(--card-height);
@@ -66,11 +87,18 @@ const Wrapper = styled(a.div)`
 
   &:hover {
     z-index: calc(var(--z-index-cards) + 1);
+    animation: none;
+    animation-delay: 3s;
   }
 
   &[data-grabbed='true'] {
     z-index: calc(var(--z-index-cards) + 2);
+    animation: none;
+    animation-delay: 3s;
   }
+
+  animation: ${wiggle} 2s infinite cubic-bezier(0.5, 0, 0.5, 1);
+  animation-delay: -${(p) => p.randomDelay}s;
 `;
 
 const CardBody = styled(a.div)<{ variant?: string }>`
@@ -140,30 +168,34 @@ const Card = ({
   bind,
   cardRef,
   springProps,
-}: CardInfo) => (
-  <Wrapper id={id} ref={cardRef} className="card" {...(bind && bind())}>
-    <CardBack style={{ ...springProps, opacity: springProps.opacity.to((o) => 1 - o) }} />
-    <CardBody style={springProps} variant={variant}>
-      <CardHeader>
-        <Cost>{cost}</Cost>
-        <Title>{title}</Title>
-      </CardHeader>
-      {images.length === 1 ? (
-        <Image src={images[0]} />
-      ) : (
-        <ImageFan images={images.map((imageUrl) => imageUrl)} />
-      )}
-      <Text>{text}</Text>
-      <GrainOverlay />
-      <SpotlightOverlay />
-      {(shiny || variant === 'action') && (
-        <StyledCanvas>
-          {shiny && <RainbowMultiply {...springProps} />}
-          {variant === 'action' && <GlowingWormBorder />}
-        </StyledCanvas>
-      )}
-    </CardBody>
-  </Wrapper>
-);
+}: CardInfo) => {
+  const randomDelay = useMemo(() => (Math.random() * 2).toFixed(2), []);
+  return (
+    <Wrapper id={id} ref={cardRef} className="card" {...(bind && bind())} randomDelay={randomDelay}>
+      <CardBack style={{ ...springProps, opacity: springProps.opacity.to((o) => 1 - o) }} />
+      <CardBody style={springProps} variant={variant}>
+        <CardHeader>
+          <Cost>{cost}</Cost>
+          <Title>{title}</Title>
+        </CardHeader>
+        {images.length === 1 ? (
+          <Image src={images[0]} />
+        ) : (
+          <ImageFan images={images.map((imageUrl) => imageUrl)} />
+        )}
+        <Text>{text}</Text>
+        <GrainOverlay />
+        <SpotlightOverlay />
+        <BorderBeam />
+        {(shiny || variant === 'action') && (
+          <StyledCanvas>
+            {shiny && <RainbowMultiply {...springProps} />}
+            {variant === 'action' && <GlowingWormBorder />}
+          </StyledCanvas>
+        )}
+      </CardBody>
+    </Wrapper>
+  );
+};
 
 export default Card;

@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
-import { nanoid } from 'nanoid';
 
 import ResourceCounter from './zoo/ResourceCounter';
 import MapArea from './zoo/MapArea';
 import Hand from './Hand';
 import Pile from './cards/Pile';
 import { useNavigate } from 'react-router-dom';
-import DrawX from './cards/Actions/DrawX';
+import MiniZone from './cards/Actions/MiniZone';
 import { useGame } from './hooks/games';
 
 const PlayArea = styled.div`
@@ -44,9 +43,9 @@ const PlayArea = styled.div`
 
 const App = () => {
   const navigate = useNavigate();
-  const [{ isLoading, data: game }, _setGame] = useGame();
+  const [game] = useGame();
 
-  if (isLoading || !game) return <div>Loading...</div>;
+  if (!game) return <div>Loading...</div>;
 
   const { hand = [], drawPile = [], discardPile = [] } = game;
 
@@ -55,7 +54,7 @@ const App = () => {
       <div onMouseDown={() => navigate('/')}>return to home</div>
       <MapArea />
       <PlayArea id="play-area">
-        <DrawX drawCount={5} cost={3} id={nanoid()} />
+        <MiniZone />
         <Pile draw cards={drawPile} facedown />
         <ResourceCounter />
         <Hand cards={hand ?? []} />

@@ -1,5 +1,6 @@
 import { useRef } from 'react';
-import { useFrame, extend, ReactThreeFiber } from '@react-three/fiber';
+import * as THREE from 'three';
+import { useFrame, useThree, extend, ReactThreeFiber } from '@react-three/fiber';
 import { shaderMaterial } from '@react-three/drei';
 import { SpringValue } from '@react-spring/three';
 import { ShaderMaterial, PlaneGeometry } from 'three';
@@ -21,7 +22,10 @@ const RainbowShaderMaterial = shaderMaterial(
     // Rotate the coordinates by 45 degrees
     float angle = 3.14159265 / 4.0; // 45 degrees in radians
     mat2 rotationMatrix = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
-    coord = rotationMatrix * (coord / size * 2.0 - 1.0);
+    coord = rotationMatrix * (coord / size * 2.0 -1.4);
+    // TODO: scale coord rotation matrix by multiplier of card size
+    // so that its centered. ~280 size  = -1.4 to center
+    // discover the underlying math to fix
 
     // Calculate the diamond pattern
     return 10.0 - max(abs(coord.x), abs(coord.y));
@@ -34,7 +38,7 @@ const RainbowShaderMaterial = shaderMaterial(
     float scaledRotateZ = rotateZ * 0.1;
 
     // Generate the rotated diamond pattern
-    float pattern = diamondPattern(gl_FragCoord.xy, 200.0);
+    float pattern = diamondPattern(gl_FragCoord.xy, 280.0);
 
     // Adjust the color calculations based on the pattern
     float r = clamp(0.25 * cos(scaledRotateX + pattern * 3.14), 0.0, 1.0);
@@ -66,7 +70,8 @@ type Props = {
 
 // Step 2: Create the component and pass animated props
 const RainbowEffect = ({ rotateX, rotateY, rotateZ }: Props) => {
-  const shaderRef = useRef<ShaderMaterial>(null);
+  const shaderRef = useRef<ShaderMaterial>(null!);
+  const { size } = useThree();
 
   useFrame(() => {
     if (!shaderRef.current) return;
@@ -77,8 +82,8 @@ const RainbowEffect = ({ rotateX, rotateY, rotateZ }: Props) => {
   });
 
   return (
-    <mesh>
-      <planeGeometry attach="geometry" args={[8, 8]} />
+    <mesh scale={new THREE.Vector3(size.width, size.height)}>
+      <planeGeometry attach="geometry" />
       <rainbowShaderMaterial ref={shaderRef} attach="material" />
     </mesh>
   );

@@ -5,7 +5,7 @@ import { useCreateGame, useDeleteGame, useDeleteAllGames } from './hooks/games';
 
 import styled from '@emotion/styled';
 import getMiningCard from './cards/Mining/getMiningCard';
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid';
 
 const GameItem = styled.div`
   display: flex;
@@ -41,7 +41,7 @@ const MenuPage = () => {
             createGame({
               name: `new fake game ${games.length + 1}`,
               drawPile: Array.from({ length: 10 }, getMiningCard),
-              actionCardPile: [{ drawCount: 5, cost: 3, id: nanoid() }],
+              actionCardPile: [{ drawCount: 5, cost: 3, id: customAlphabet('brumBRUM', 21)() }],
             });
           }}
         >

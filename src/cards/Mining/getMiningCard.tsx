@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid';
 
 import { coal, copper, gold, oil, rock, sand, magnetite } from '../../assets/resources/raw';
 
@@ -19,7 +19,7 @@ const getMiningCard = ({ facedown }: MiningCardProps = {}) => {
   return {
     cost: 0,
     facedown,
-    id: nanoid(),
+    id: customAlphabet('brumBRUM', 21)(),
     title: 'Mining',
     variant: 'rawResources',
     shiny: Math.random() > 0.75,
