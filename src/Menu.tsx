@@ -26,30 +26,30 @@ const MenuPage = () => {
   if (!games || isLoading) return <div>Loading...</div>;
 
   return (
-    <>
-      <div>SETTINGS MENU</div>
-      <div>
-        {games.map((game) => (
-          <GameItem key={game.id}>
-            <div onMouseDown={() => navigate(`/game/${game.id}`)}>game: {game.id}</div>
-            <div onMouseDown={() => deleteGame(game.id)}>delete</div>
-          </GameItem>
-        ))}
+              <>
+                <div>SETTINGS MENU</div>
+                <div>
+                  {games.map((game) => (
+                    <GameItem key={game.id}>
+                      <div onMouseDown={() => navigate(`/game/${game.id}`)}>game: {game.id}</div>
+                      <div onMouseDown={() => deleteGame(game.id)}>delete</div>
+                    </GameItem>
+                  ))}
 
-        <div
-          onMouseDown={() => {
-            createGame({
-              name: `new fake game ${games.length + 1}`,
-              drawPile: Array.from({ length: 10 }, getMiningCard),
-              actionCardPile: [{ drawCount: 5, cost: 3, id: customAlphabet('brumBRUM', 21)() }],
-            });
-          }}
-        >
-          Create new game
-        </div>
-        <div onMouseDown={() => deleteAllGames()}> delete all games</div>
-      </div>
-    </>
+                  <div
+                    onMouseDown={() => {
+                      createGame({
+                        name: `new fake game ${games.length + 1}`,
+                        drawPile: Array.from({ length: 10 }, getMiningCard),
+                        actionCardPile: [{ drawCount: 5, cost: 3, id: customAlphabet('brumBRUM', 21)() }],
+                      });
+                    }}
+                  >
+                    Create new game
+                  </div>
+                  <div onMouseDown={() => deleteAllGames()}> delete all games</div>
+                </div>
+              </>
   );
 };
 
