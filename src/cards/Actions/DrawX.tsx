@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { useSpring, config } from '@react-spring/web';
 
 import Card from '../Card';
@@ -15,7 +15,7 @@ export type ActionEconomyCardInformation = {
 
 const DrawX = ({ drawCount, shiny, cost, id }: ActionEconomyCardInformation) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [game, setGame] = useGame();
+  const [_game, _setGame] = useGame();
 
   const [props, api] = useSpring(
     () => ({
