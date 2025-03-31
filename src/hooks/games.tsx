@@ -26,11 +26,13 @@ export const useGame = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [GAME_ROOT] }),
   });
 
-  return [query, mutate] as const;
+  // seeing if we ever want to interrogate `isLoading`/`isError`/`isRefetching`
+  // trivial to revert later if we find we do want those things.
+  return [query?.data, mutate] as const;
 };
 
 export const useDiscard = () => {
-  const [{ data: game }, setGame] = useGame();
+  const [game, setGame] = useGame();
 
   return useCallback(
     (cardId: string) => {

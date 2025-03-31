@@ -1,5 +1,5 @@
 import localforage from 'localforage';
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid';
 
 import { deleteGameResources, resources } from './resources';
 import { GeneralCardInformation } from '../cards/types';
@@ -39,7 +39,7 @@ const EMPTY_GAME_STATE = {
 };
 
 export const createGame = async (game: Partial<Game>): Promise<Game> => {
-  const id = nanoid();
+  const id = customAlphabet('brumBRUM', 21)();
   const newGame = {
     ...EMPTY_GAME_STATE,
     ...game,

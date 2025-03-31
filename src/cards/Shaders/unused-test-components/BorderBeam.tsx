@@ -61,9 +61,9 @@ const BorderBeamContainer = styled.div<{
 export const BorderBeam = ({
   className,
   size = 200,
-  duration = 9,
+  duration = 3,
   anchor = 90,
-  borderWidth = 2,
+  borderWidth = 4,
   colorFrom = '#ffaa40',
   colorTo = '#9c40ff',
   delay = 0,
