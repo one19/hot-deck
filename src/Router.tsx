@@ -21,7 +21,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Global styles={globalStyles} />
-      <BrowserRouter>
+      <BrowserRouter basename="/hot-deck">
         <Routes>
           <Route path="/" element={<Menu />} />
           <Route path="/game/:gameId" element={<Game />} />
