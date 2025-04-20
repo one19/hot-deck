@@ -69,14 +69,17 @@ const GlitchMaterial = shaderMaterial(
     vec3 color = mix(vec3(0.5, 0.0, 0.5), vec3(0.0, 0.5, 0.5), contour);
 
     gl_FragColor = vec4(color, 1.0);
-  }`
+  }`,
 );
 
 extend({ GlitchMaterial });
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    glitchMaterial: ReactThreeFiber.Object3DNode<ShaderMaterial, typeof ShaderMaterial> & {
+    glitchMaterial: ReactThreeFiber.Object3DNode<
+      ShaderMaterial,
+      typeof ShaderMaterial
+    > & {
       resolution?: Vector2;
       time?: number;
     };
@@ -90,8 +93,7 @@ const GlitchOverlay = () => {
   useFrame(({ clock, size }) => {
     if (!shaderRef.current) return;
     shaderRef.current.uniforms.time.value = clock.getElapsedTime();
-    /* eslint-disable @typescript-eslint/no-unsafe-call */
-    /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
     shaderRef.current.uniforms.resolution.value?.set(size.width, size.height);
   });
 

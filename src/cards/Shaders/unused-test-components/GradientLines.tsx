@@ -73,14 +73,17 @@ const GradientLineShader = shaderMaterial(
     int index = int(mod(noise * 10.0, 6.0)); // Pick a color based on the noise value
     vec3 color = colors[index] * line; // Apply the chosen color
     gl_FragColor = vec4(color, line); // Ensure background is transparent where there are no lines
-  }`
+  }`,
 );
 
 extend({ GradientLineShader });
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    gradientLineShader: ReactThreeFiber.Object3DNode<ShaderMaterial, typeof ShaderMaterial> & {
+    gradientLineShader: ReactThreeFiber.Object3DNode<
+      ShaderMaterial,
+      typeof ShaderMaterial
+    > & {
       resolution?: Vector2;
       time?: number;
     };
@@ -94,8 +97,7 @@ const GradientLineOverlay = () => {
   useFrame(({ clock, size }) => {
     if (!shaderRef.current) return;
     shaderRef.current.uniforms.time.value = clock.getElapsedTime();
-    /* eslint-disable @typescript-eslint/no-unsafe-call */
-    /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
     shaderRef.current.uniforms.resolution.value?.set(size.width, size.height);
   });
 

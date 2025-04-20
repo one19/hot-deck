@@ -43,14 +43,17 @@ const RainbowShaderMaterial = shaderMaterial(
 
     // Set the final color with low opacity
     gl_FragColor = vec4(r, g, b, 0.05);
-  }`
+  }`,
 );
 
 extend({ RainbowShaderMaterial, PlaneGeometry });
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    rainbowShaderMaterial: ReactThreeFiber.Object3DNode<ShaderMaterial, typeof ShaderMaterial> & {
+    rainbowShaderMaterial: ReactThreeFiber.Object3DNode<
+      ShaderMaterial,
+      typeof ShaderMaterial
+    > & {
       rotateX?: number;
       rotateY?: number;
       rotateZ?: number;

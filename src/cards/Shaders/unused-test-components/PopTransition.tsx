@@ -27,7 +27,10 @@ const Squircle = ({ position, scale, opacity }: SquircleProps) => {
 
 const PopEffectWrapper = ({ children }: { children: ReactNode }) => {
   const [isUnmounting, setIsUnmounting] = useState(false);
-  const { opacity } = useSpring({ opacity: isUnmounting ? 0 : 1, config: { duration: 200 } });
+  const { opacity } = useSpring({
+    opacity: isUnmounting ? 0 : 1,
+    config: { duration: 200 },
+  });
 
   useEffect(() => {
     return () => {
@@ -36,10 +39,13 @@ const PopEffectWrapper = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const squircles = Array.from({ length: Math.floor(Math.random() * 6) + 5 }, () => ({
-    position: [Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5],
-    scale: Math.random() * 0.5,
-  }));
+  const squircles = Array.from(
+    { length: Math.floor(Math.random() * 6) + 5 },
+    () => ({
+      position: [Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5],
+      scale: Math.random() * 0.5,
+    }),
+  );
 
   console.log(isUnmounting);
 
@@ -48,7 +54,9 @@ const PopEffectWrapper = ({ children }: { children: ReactNode }) => {
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
       <Html>
-        <div style={{ display: isUnmounting ? 'none' : 'block' }}>{children}</div>
+        <div style={{ display: isUnmounting ? 'none' : 'block' }}>
+          {children}
+        </div>
       </Html>
       {isUnmounting &&
         squircles.map((squircle, index) => (

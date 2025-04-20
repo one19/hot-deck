@@ -23,14 +23,17 @@ const TestMaterial = shaderMaterial(
   
     gl_FragColor = vec4(vUv, 1.0, 1.0);
   }
-  `
+  `,
 );
 
 extend({ TestMaterial });
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    testMaterial: ReactThreeFiber.Object3DNode<ShaderMaterial, typeof ShaderMaterial>;
+    testMaterial: ReactThreeFiber.Object3DNode<
+      ShaderMaterial,
+      typeof ShaderMaterial
+    >;
   }
 }
 

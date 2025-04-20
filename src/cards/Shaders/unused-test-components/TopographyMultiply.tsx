@@ -125,7 +125,7 @@ const TopographyShaderMaterial = shaderMaterial(
 
     gl_FragColor = vec4(finalColor, 0.05); // 10% opacity
   }
-  `
+  `,
 );
 
 extend({ TopographyShaderMaterial, PlaneGeometry });
@@ -152,7 +152,11 @@ const TopographyWrapper = ({ color }: { color: Color }) => {
   return (
     <mesh>
       <planeGeometry args={[5, 7, 64, 64]} />
-      <topographyShaderMaterial ref={materialRef} attach="material" colorMultiply={color} />
+      <topographyShaderMaterial
+        ref={materialRef}
+        attach="material"
+        colorMultiply={color}
+      />
     </mesh>
   );
 };
