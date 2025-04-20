@@ -1,6 +1,6 @@
 # untitled deck game
 
-[pages deployment](https://one19.github.io/hot-deck/)
+[pages deployment](https://one19.github.io/hot-deck/) [pages deployment](https://one19.github.io/hot-deck/storybook)
 
 [![Auto merge basic check](https://github.com/one19/hot-deck/actions/workflows/test.yml/badge.svg)](https://github.com/one19/hot-deck/actions/workflows/test.yml)
 
