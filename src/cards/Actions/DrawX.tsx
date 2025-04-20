@@ -13,7 +13,12 @@ export type ActionEconomyCardInformation = {
   id: string;
 };
 
-const DrawX = ({ drawCount, shiny, cost, id }: ActionEconomyCardInformation) => {
+const DrawX = ({
+  drawCount,
+  shiny,
+  cost,
+  id,
+}: ActionEconomyCardInformation) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [{ data: game }, setGame] = useGame();
 
@@ -22,7 +27,7 @@ const DrawX = ({ drawCount, shiny, cost, id }: ActionEconomyCardInformation) => 
       ...DEFAULT_ORIENTATION,
       config: config.stiff,
     }),
-    []
+    [],
   );
 
   useEffect(() => {

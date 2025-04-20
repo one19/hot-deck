@@ -42,7 +42,14 @@ const LargeContent = styled.div`
       transparent 80%,
       transparent
     ),
-    radial-gradient(circle, transparent 20%, #8787e1 20%, #8787e1 80%, transparent 80%, transparent)
+    radial-gradient(
+        circle,
+        transparent 20%,
+        #8787e1 20%,
+        #8787e1 80%,
+        transparent 80%,
+        transparent
+      )
       57.5px 57.5px,
     linear-gradient(#666895 4.6px, transparent 4.6px) 0 -2.3px,
     linear-gradient(90deg, #666895 4.6px, #8787e1 4.6px) -2.3px 0;
@@ -92,7 +99,11 @@ const MapArea = () => (
       {/* Example labels for Y-axis */}
       {Array.from({ length: 21 }).map((_, i) => (
         <CoordinateLabel
-          style={{ left: '50%', top: `${5 * i}%`, transform: 'translate(-100%, 0)' }}
+          style={{
+            left: '50%',
+            top: `${5 * i}%`,
+            transform: 'translate(-100%, 0)',
+          }}
         >
           {1000 - 100 * i} m
         </CoordinateLabel>
@@ -100,7 +111,11 @@ const MapArea = () => (
       {/* Example labels for X-axis */}
       {Array.from({ length: 21 }).map((_, i) => (
         <CoordinateLabel
-          style={{ top: '50%', left: `${5 * i}%`, transform: 'translate(0, -100%)' }}
+          style={{
+            top: '50%',
+            left: `${5 * i}%`,
+            transform: 'translate(0, -100%)',
+          }}
         >
           {-1000 + 100 * i} m
         </CoordinateLabel>

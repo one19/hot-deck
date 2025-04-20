@@ -1,5 +1,11 @@
 import { useRef, useEffect, useState } from 'react';
-import { useFrame, useThree, extend, Canvas, Object3DNode } from '@react-three/fiber';
+import {
+  useFrame,
+  useThree,
+  extend,
+  Canvas,
+  Object3DNode,
+} from '@react-three/fiber';
 import { shaderMaterial } from '@react-three/drei';
 import { ShaderMaterial, PlaneGeometry, AdditiveBlending } from 'three';
 
@@ -24,14 +30,17 @@ const ScanlineShaderMaterial = shaderMaterial(
     // Apply a time-based fading effect
     float fade = 0.3 + 0.1 * cos(time * 0.5); // Oscillating fade effect
     gl_FragColor = color * fade; // Use the calculated color directly
-  }`
+  }`,
 );
 
 extend({ ScanlineShaderMaterial, PlaneGeometry });
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    scanlineShaderMaterial: Object3DNode<ShaderMaterial, typeof ShaderMaterial> & {
+    scanlineShaderMaterial: Object3DNode<
+      ShaderMaterial,
+      typeof ShaderMaterial
+    > & {
       time?: number;
     };
   }
@@ -57,7 +66,11 @@ const Shader: React.FC = () => {
   return (
     <mesh>
       <planeGeometry attach="geometry" args={planeSize} />
-      <scanlineShaderMaterial ref={shaderRef} attach="material" blending={AdditiveBlending} />
+      <scanlineShaderMaterial
+        ref={shaderRef}
+        attach="material"
+        blending={AdditiveBlending}
+      />
     </mesh>
   );
 };

@@ -3,14 +3,19 @@ import styled from '@emotion/styled';
 const LEFT_ANGLE = (Math.atan2(1, 0.5) * 180) / Math.PI;
 const RIGHT_ANGLE = 180 - LEFT_ANGLE;
 
-const calculateDimensions = (angleDegrees: number): { width: string; height: string } => {
+const calculateDimensions = (
+  angleDegrees: number,
+): { width: string; height: string } => {
   const angleRadians = angleDegrees * (Math.PI / 180);
 
   if (angleDegrees <= LEFT_ANGLE) {
     const ratio = Math.tan(angleRadians);
     return { width: '0', height: `${Math.round(100 - ratio * 50)}%` };
   } else if (angleDegrees >= RIGHT_ANGLE) {
-    return { width: '100%', height: `${Math.round(100 - Math.tan(Math.PI - angleRadians) * 50)}%` };
+    return {
+      width: '100%',
+      height: `${Math.round(100 - Math.tan(Math.PI - angleRadians) * 50)}%`,
+    };
   } else if (angleDegrees <= 90) {
     const ratio = Math.tan(Math.PI / 2 - angleRadians);
     const fromCenter = 100 * (0.5 - ratio);
@@ -44,8 +49,10 @@ const ImageWrapper = styled.div<{ count: number }>`
       const angle = 180 / count;
       const startAngle = (180 / count) * index;
       const endAngle = startAngle + angle;
-      const containsLeftCorner = startAngle < LEFT_ANGLE && endAngle >= LEFT_ANGLE;
-      const containsRightCorner = startAngle < RIGHT_ANGLE && endAngle >= RIGHT_ANGLE;
+      const containsLeftCorner =
+        startAngle < LEFT_ANGLE && endAngle >= LEFT_ANGLE;
+      const containsRightCorner =
+        startAngle < RIGHT_ANGLE && endAngle >= RIGHT_ANGLE;
 
       const startDims = calculateDimensions(startAngle);
       const endDims = calculateDimensions(endAngle);

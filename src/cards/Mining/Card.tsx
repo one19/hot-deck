@@ -37,12 +37,14 @@ const MiningCard = ({
     () => ({
       ...DEFAULT_ORIENTATION,
       ...orientation,
-      rotateZ: (orientation?.rotateZ ?? DEFAULT_ORIENTATION.rotateZ) * (facedown ? -1 : 1),
+      rotateZ:
+        (orientation?.rotateZ ?? DEFAULT_ORIENTATION.rotateZ) *
+        (facedown ? -1 : 1),
       opacity: facedown ? 0 : 1,
       rotateY: facedown ? 180 : 0,
       config: config.stiff,
     }),
-    [orientation]
+    [orientation],
   );
 
   const rotX = (py: number) =>
@@ -60,7 +62,8 @@ const MiningCard = ({
           // Capture the initial offset from the cursor to the center of the card
           if (first && initial) {
             const cardCenterX = dimStore.current.x + dimStore.current.width / 2;
-            const cardCenterY = dimStore.current.y + dimStore.current.height / 2;
+            const cardCenterY =
+              dimStore.current.y + dimStore.current.height / 2;
             initialOffset.current = {
               x: initial[0] - cardCenterX,
               y: initial[1] - cardCenterY,
@@ -83,7 +86,13 @@ const MiningCard = ({
           const DURATION = 250;
           mutate({ [hoveredResourceRef.current]: 1 });
           // TODO: replace this with stars and sparkles
-          void api.start({ x: 0, y: 0, scale: 0, rotateZ: 6000, config: { duration: DURATION } });
+          void api.start({
+            x: 0,
+            y: 0,
+            scale: 0,
+            rotateZ: 6000,
+            config: { duration: DURATION },
+          });
           setTimeout(() => discard(id), DURATION);
         } else {
           // return to initial on end of dragging phase
@@ -140,7 +149,7 @@ const MiningCard = ({
         }
       },
     },
-    { drag: { pointer: { capture: false } } }
+    { drag: { pointer: { capture: false } } },
   );
 
   return (
@@ -162,8 +171,11 @@ const MiningCard = ({
         renderSelection &&
         !facedown &&
         createPortal(
-          <ResourceSelector resources={resources} hoveredResourceRef={hoveredResourceRef} />,
-          playArea
+          <ResourceSelector
+            resources={resources}
+            hoveredResourceRef={hoveredResourceRef}
+          />,
+          playArea,
         )}
     </>
   );

@@ -51,11 +51,19 @@ export const createGame = async (game: Partial<Game>): Promise<Game> => {
   return newGame;
 };
 
-export const updateGame = async (updatedGame: Partial<Game>, gameId: string): Promise<Game> => {
+export const updateGame = async (
+  updatedGame: Partial<Game>,
+  gameId: string,
+): Promise<Game> => {
   const item = await games.getItem<Game>(gameId);
   if (!item) throw Error('Game not found to update');
 
-  const update = { ...item, ...updatedGame, id: gameId, updatedAt: new Date().toISOString() };
+  const update = {
+    ...item,
+    ...updatedGame,
+    id: gameId,
+    updatedAt: new Date().toISOString(),
+  };
   await games.setItem<Game>(gameId, update);
 
   return update;
@@ -72,7 +80,8 @@ const removeEmpties = (obj: Game | null): obj is Game => obj !== null;
 export const getAllGames = async (): Promise<Game[]> => {
   const keys = await games.keys();
   const items = await Promise.all(keys.map((key) => games.getItem<Game>(key)));
-  if (items.length !== keys.length) console.warn("Some games weren't found, uh oh.");
+  if (items.length !== keys.length)
+    console.warn("Some games weren't found, uh oh.");
 
   return items.filter(removeEmpties);
 };

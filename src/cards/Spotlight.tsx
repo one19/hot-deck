@@ -20,7 +20,7 @@ const Spotlight = (/* { parentRef } */) => {
       style={{
         background: spotlightProps.spotlightX.to(
           (spotlightX, spotlightY) =>
-            `radial-gradient(circle at ${spotlightX} ${spotlightY}, rgba(255, 255, 255, 0.3), transparent)`
+            `radial-gradient(circle at ${spotlightX} ${spotlightY}, rgba(255, 255, 255, 0.3), transparent)`,
         ),
       }}
     />

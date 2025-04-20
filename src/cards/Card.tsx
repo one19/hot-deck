@@ -131,7 +131,9 @@ const Card = ({
   springProps,
 }: CardInfo) => (
   <Wrapper id={id} ref={cardRef} className="card" {...(bind && bind())}>
-    <CardBack style={{ ...springProps, opacity: springProps.opacity.to((o) => 1 - o) }} />
+    <CardBack
+      style={{ ...springProps, opacity: springProps.opacity.to((o) => 1 - o) }}
+    />
     <CardBody style={springProps} variant={variant}>
       {/* HOLY POOP. We must write this with webgl because this causes a 36x increase in gpu use */}
       {/* {variant === 'action' && <BorderBeam />} */}

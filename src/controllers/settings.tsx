@@ -10,7 +10,9 @@ export type Settings = {
 };
 const DEFAULT_SETTINGS: Settings = {};
 
-export const updateSettings = async (updatedSetting: Partial<Settings>): Promise<Settings> => {
+export const updateSettings = async (
+  updatedSetting: Partial<Settings>,
+): Promise<Settings> => {
   const item = await settings.getItem<Settings>('overall');
 
   const update = { ...item, ...updatedSetting };

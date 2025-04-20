@@ -62,7 +62,14 @@ type Props = {
   cardFactory?: typeof miningCard;
   cards?: GeneralCardInformation[];
 };
-const Pile = ({ draw, discard, infinite, facedown, cardFactory, cards }: Props) => {
+const Pile = ({
+  draw,
+  discard,
+  infinite,
+  facedown,
+  cardFactory,
+  cards,
+}: Props) => {
   // when in the tech tree
   if (!cards && cardFactory) {
     return (

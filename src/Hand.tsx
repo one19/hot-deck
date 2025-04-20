@@ -12,7 +12,11 @@ const HandContainer = styled.div<{ isLargeHand: boolean }>`
   position: ${({ isLargeHand }) => (isLargeHand ? 'relative' : 'static')};
 `;
 
-const PositionalWrapper = styled.div<{ isLargeHand: boolean; index: number; totalCards: number }>`
+const PositionalWrapper = styled.div<{
+  isLargeHand: boolean;
+  index: number;
+  totalCards: number;
+}>`
   ${({ isLargeHand, index, totalCards }) =>
     isLargeHand &&
     `
@@ -33,8 +37,12 @@ const Hand = ({ cards }: HandProps) => {
     <HandContainer isLargeHand={isLargeHand}>
       {cards.map((card, index) => {
         const offCenter = index + 0.5 - cards.length / 2;
-        const rotationAngle = isLargeHand ? REDUCED_ROTATION_ANGLE : ROTATION_ANGLE;
-        const positionStyles = isLargeHand ? { rotateZ: rotationAngle * offCenter } : {};
+        const rotationAngle = isLargeHand
+          ? REDUCED_ROTATION_ANGLE
+          : ROTATION_ANGLE;
+        const positionStyles = isLargeHand
+          ? { rotateZ: rotationAngle * offCenter }
+          : {};
 
         return (
           <PositionalWrapper

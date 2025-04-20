@@ -9,11 +9,12 @@ const useWiggle = (
   api: SpringRef<{
     rotateZ: number;
   }>,
-  initialOrientation: number
+  initialOrientation: number,
 ) => {
   useEffect(() => {
     // Calculate a random starting point between -3 and +3 degrees from the initial orientation
-    const initialDelta = Math.random() * maxRotationDegree * 2 - maxRotationDegree;
+    const initialDelta =
+      Math.random() * maxRotationDegree * 2 - maxRotationDegree;
     const initialTarget = initialOrientation + initialDelta;
 
     // Start the first animation towards this random target
@@ -30,7 +31,8 @@ const useWiggle = (
     const timeout = setTimeout(() => {
       let isMovingToMax = initialDelta < 0;
       const nextTarget = () =>
-        initialOrientation + (isMovingToMax ? maxRotationDegree : -maxRotationDegree);
+        initialOrientation +
+        (isMovingToMax ? maxRotationDegree : -maxRotationDegree);
 
       const interval = setInterval(() => {
         void api.start({

@@ -36,7 +36,8 @@ const BorderBeamContainer = styled.div<{
   /* Mask styles */
   mask-clip: padding-box, border-box !important;
   mask-composite: intersect !important;
-  mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
+  mask:
+    linear-gradient(transparent, transparent), linear-gradient(white, white);
 
   /* Pseudo-element styles */
   &::after {

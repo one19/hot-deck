@@ -12,8 +12,10 @@ const useCardHover = ({ cardRef, api, props }: UseCardHoverProps) => {
   const dimStore = useRef<DOMRect>({} as DOMRect);
 
   const rotX = useCallback(
-    (py: number) => (py - props.y.get() - dimStore.current.y - dimStore.current.height / 2) / 5,
-    [props.y, dimStore]
+    (py: number) =>
+      (py - props.y.get() - dimStore.current.y - dimStore.current.height / 2) /
+      5,
+    [props.y, dimStore],
   );
   const rotY = (px: number) =>
     -(px - props.x.get() - dimStore.current.x - dimStore.current.width / 2) / 5;
