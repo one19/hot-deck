@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getAllGames, GAME_ROOT } from './controllers/games';
-import { useNavigate } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 import { useCreateGame, useDeleteGame, useDeleteAllGames } from './hooks/games';
 
 import styled from '@emotion/styled';
@@ -14,7 +14,6 @@ const GameItem = styled.div`
 `;
 
 const MenuPage = () => {
-  const navigate = useNavigate();
   const createGame = useCreateGame();
   const deleteGame = useDeleteGame();
   const deleteAllGames = useDeleteAllGames();
@@ -31,7 +30,7 @@ const MenuPage = () => {
       <div>
         {games.map((game) => (
           <GameItem key={game.id}>
-            <div onMouseDown={() => navigate(`/game/${game.id}`)}>game: {game.id}</div>
+            <Link to={`/game/${game.id}`}>game: {game.id}</Link>
             <div onMouseDown={() => deleteGame(game.id)}>delete</div>
           </GameItem>
         ))}

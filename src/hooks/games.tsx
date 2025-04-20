@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useParams } from '@tanstack/react-router';
 
 import {
   deleteAllGames,
@@ -9,12 +10,14 @@ import {
   Game,
   GAME_ROOT,
 } from '../controllers/games';
-import { useParams } from 'react-router-dom';
 import { useCallback } from 'react';
 
 export const useGame = () => {
   const queryClient = useQueryClient();
-  const { gameId = 'test' } = useParams<{ gameId: string }>();
+  const gameId = useParams({
+    from: '/game/$gameId',
+    select: (params) => params.gameId || 'test',
+  });
 
   const query = useQuery({
     queryKey: [GAME_ROOT, { id: gameId }],
@@ -44,7 +47,7 @@ export const useDiscard = () => {
 
       setGame({ hand: remainingHand, discardPile: updatedDiscard });
     },
-    [game, setGame]
+    [game, setGame],
   );
 };
 

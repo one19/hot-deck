@@ -5,7 +5,7 @@ import ResourceCounter from './zoo/ResourceCounter';
 import MapArea from './zoo/MapArea';
 import Hand from './Hand';
 import Pile from './cards/Pile';
-import { useNavigate } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 import DrawX from './cards/Actions/DrawX';
 import { useGame } from './hooks/games';
 
@@ -43,7 +43,6 @@ const PlayArea = styled.div`
 `;
 
 const App = () => {
-  const navigate = useNavigate();
   const [{ isLoading, data: game }, _setGame] = useGame();
 
   if (isLoading || !game) return <div>Loading...</div>;
@@ -52,7 +51,7 @@ const App = () => {
 
   return (
     <>
-      <div onMouseDown={() => navigate('/')}>return to home</div>
+      <Link to="/">return to home</Link>
       <MapArea />
       <PlayArea id="play-area">
         <DrawX drawCount={5} cost={3} id={nanoid()} />

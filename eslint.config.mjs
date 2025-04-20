@@ -1,99 +1,47 @@
-import { fixupConfigRules } from '@eslint/compat';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import prettier from 'eslint-plugin-prettier';
-import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
+import eslintPluginStorybook from 'eslint-plugin-storybook';
+import tseslint from 'typescript-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
-
-export default [
-  ...fixupConfigRules(
-    compat.extends(
-      'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'plugin:@typescript-eslint/recommended-requiring-type-checking',
-      'plugin:react-hooks/recommended'
-    )
-  ),
+export default tseslint.config(
+  { ignores: ['dist'] },
   {
-    plugins: {
-      'react-refresh': reactRefresh,
-      prettier,
-    },
-
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      eslintPluginPrettier,
+    ],
+    files: ['**/*.{js,ts,tsx}'],
     languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
-
-      parser: tsParser,
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-
-      parserOptions: {
-        project: 'tsconfig.json',
-        tsconfigRootDir: './',
-      },
+      ecmaVersion: 2020,
+      globals: globals.browser,
     },
-
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
     rules: {
+      ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
-        {
-          allowConstantExport: true,
-        },
+        { allowConstantExport: true },
       ],
-
-      '@typescript-eslint/no-non-null-assertion': 'off',
+      // Enforce Prettier formatting rules
+      'prettier/prettier': ['error', { singleQuote: true }],
+      // Ignore unused variables that begin with "_" (for JavaScript)
+      'no-unused-vars': ['off'],
+      // Ignore unused variables that begin with "_" (for TypeScript)
       '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          varsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_',
-        },
-      ],
-
-      'comma-dangle': 'off',
-      'no-confusing-arrow': 'off',
-      quotes: [
-        2,
-        'single',
-        {
-          allowTemplateLiterals: true,
-          avoidEscape: true,
-        },
-      ],
-
-      'prettier/prettier': [
-        'error',
-        {
-          trailingComma: 'es5',
-          singleQuote: true,
-          printWidth: 100,
-        },
-      ],
-      'max-len': [
-        'error',
-        {
-          ignoreTemplateLiterals: true,
-          ignoreRegExpLiterals: true,
-          ignoreStrings: true,
-          ignoreUrls: true,
-          comments: 100,
-          code: 100,
-        },
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
     },
   },
-  { ignores: ['node_modules', 'dist', 'eslint.config.mjs'] },
-];
+  {
+    files: ['**/*.stories.@(js|ts|tsx)'],
+    extends: [eslintPluginStorybook.configs['flat/recommended']],
+  },
+);

@@ -1,9 +1,14 @@
 import { Global, css } from '@emotion/react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {
+  RouterProvider,
+  createRouter,
+  createRootRouteWithContext,
+  createRoute,
+  Outlet,
+} from '@tanstack/react-router';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import Menu from './Menu';
 import Game from './Game';
-// import Scanlines from './zoo/Scanlines';
 
 const globalStyles = css`
   html,
@@ -17,17 +22,35 @@ const globalStyles = css`
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  return (
+const rootRoute = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  component: () => (
     <QueryClientProvider client={queryClient}>
       <Global styles={globalStyles} />
-      <BrowserRouter basename="/hot-deck">
-        <Routes>
-          <Route path="/" element={<Menu />} />
-          <Route path="/game/:gameId" element={<Game />} />
-        </Routes>
-      </BrowserRouter>
+      <Outlet />
     </QueryClientProvider>
-  );
-};
+  ),
+});
+
+const menuRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  component: Menu,
+});
+
+const gameRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/game/$gameId',
+  component: Game,
+});
+
+const routeTree = rootRoute.addChildren([menuRoute, gameRoute]);
+
+const router = createRouter({
+  routeTree,
+  context: { queryClient },
+  basepath: '/hot-deck',
+});
+
+const App = () => <RouterProvider router={router} />;
+
 export default App;
